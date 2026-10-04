@@ -9,3 +9,13 @@ export interface VerifyAccountPayload {
   email: string;
   otp: string;
 }
+
+export interface LoginPayload {
+  email: string;
+  password: string;
+}
+
+export interface AuthResponseData {
+  accessToken: string;
+  refreshToken: string;
+}

@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { userRegistraition, verifyAccount } from "@/api/auth.api";
+import { loginUser, userRegistraition, verifyAccount } from "@/api/auth.api";
 
 export const useRegistration = () => {
   return useMutation({
@@ -10,5 +10,11 @@ export const useRegistration = () => {
 export const useVerifyAccount = () => {
   return useMutation({
     mutationFn: verifyAccount,
+  });
+};
+
+export const useLoginUser = () => {
+  return useMutation({
+    mutationFn: loginUser,
   });
 };
