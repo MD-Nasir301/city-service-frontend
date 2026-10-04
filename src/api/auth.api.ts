@@ -1,5 +1,9 @@
 import apiClient from "@/lib/apiClient";
-import { LoginPayload, RegisterPayload, VerifyAccountPayload } from "@/types/auth.type";
+import {
+  LoginPayload,
+  RegisterPayload,
+  VerifyAccountPayload,
+} from "@/types/auth.type";
 
 export const userRegistraition = async (payload: RegisterPayload) => {
   return await apiClient("/auth/register", {
@@ -15,9 +19,21 @@ export const verifyAccount = async (payload: VerifyAccountPayload) => {
   });
 };
 
-
 export const loginUser = async (payload: LoginPayload) => {
   return await apiClient("/auth/login", {
+    method: "POST",
+    body: payload,
+  });
+};
+
+export const userLogout = async () => {
+  return await apiClient("/auth/logout", {
+    method: "POST",
+  });
+};
+
+export const googleOAuth = async (payload: { idToken: string }) => {
+  return await apiClient("/auth/google", {
     method: "POST",
     body: payload,
   });

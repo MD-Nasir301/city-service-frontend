@@ -20,6 +20,8 @@ import z from "zod";
 import { useRegistration } from "@/hooks/auth.hook";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
+import { GoogleLogin } from "@react-oauth/google";
+import { useGoogleAuthHandler } from "@/hooks/useGoogleAuthHandler";
 
 export function RegisterForm() {
   const router = useRouter();
@@ -38,6 +40,7 @@ export function RegisterForm() {
 
   const { mutate: registration, isPending: registrationPending } =
     useRegistration();
+  const { handleGoogleSuccess, handleGoogleError } = useGoogleAuthHandler();
 
   const form = useForm({
     defaultValues,
@@ -275,9 +278,16 @@ export function RegisterForm() {
         </FieldGroup>
       </form>
 
-      <FieldSeparator>Or continue with</FieldSeparator>
+      <FieldSeparator>Or</FieldSeparator>
 
-      {/* <GoogleLoginComponent /> */}
+      <div className="px-6">
+        <GoogleLogin
+          shape="pill"
+          text="continue_with"
+          onSuccess={handleGoogleSuccess}
+          onError={handleGoogleError}
+        />
+      </div>
 
       <div className="text-center text-sm text-muted-foreground">
         Already have an account?{" "}

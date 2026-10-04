@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useForm } from "@tanstack/react-form";
@@ -17,9 +16,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { loginSchema } from "@/validation/auth.validation";
 import z from "zod";
-import { useLoginUser } from "@/hooks/auth.hook";
+import { useGoogleOAuth, useLoginUser } from "@/hooks/auth.hook";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
+import { GoogleLogin } from "@react-oauth/google";
+import { useGoogleAuthHandler } from "@/hooks/useGoogleAuthHandler";
 
 export function LoginForm() {
   const router = useRouter();
@@ -33,6 +34,7 @@ export function LoginForm() {
   };
 
   const { mutate: login, isPending: loginPending } = useLoginUser();
+  const { handleGoogleSuccess, handleGoogleError } = useGoogleAuthHandler();
 
   const form = useForm({
     defaultValues,
@@ -161,11 +163,7 @@ export function LoginForm() {
           </form.Field>
 
           {/* Submit Button */}
-          <Button
-            disabled={loginPending}
-            type="submit"
-            className="w-full"
-          >
+          <Button disabled={loginPending} type="submit" className="w-full">
             {loginPending ? (
               <>
                 <Spinner /> Logging in...
@@ -177,9 +175,15 @@ export function LoginForm() {
         </FieldGroup>
       </form>
 
-      <FieldSeparator>Or continue with</FieldSeparator>
-
-      {/* <GoogleLoginComponent /> */}
+      <FieldSeparator>Or</FieldSeparator>
+      <div className="px-6">
+        <GoogleLogin
+          shape="pill"
+          text="continue_with"
+          onSuccess={handleGoogleSuccess}
+          onError={handleGoogleError}
+        />
+      </div>
 
       <div className="text-center text-sm text-muted-foreground">
         Don't have an account?{" "}
