@@ -1,4 +1,4 @@
-import { ofetch } from "ofetch";
+import { ofetch, FetchContext } from "ofetch";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -6,12 +6,16 @@ const apiClient = ofetch.create({
   baseURL: BASE_URL,
   credentials: "include",
 
-  async onResponseError({ request, response, options }) {
+  async onResponseError(context: FetchContext) {
+    const { request, response, options } = context;
+    if (!response) return;
+
     const requestUrl = request.toString();
 
     const isAuthRoute =
       requestUrl.includes("/auth/refresh-token") ||
-      requestUrl.includes("/auth/login");
+      requestUrl.includes("/auth/login") ||
+      requestUrl.includes("/auth/me");
 
     if (response.status === 401 && !isAuthRoute) {
       try {
@@ -23,9 +27,6 @@ const apiClient = ofetch.create({
         await ofetch(request, options);
         return;
       } catch (error) {
-        if (typeof window !== "undefined") {
-          window.location.href = "/login";
-        }
         throw error;
       }
     }

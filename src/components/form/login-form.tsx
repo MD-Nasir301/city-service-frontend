@@ -72,7 +72,7 @@ export function LoginForm() {
   // One-Click Demo Login Handler
   const handleDemoLogin = (role: Role) => {
     const demoCredentials = {
-      CITIZEN: { email: "nasir201b+staff2@gmail.com", password: "Ab@12345" },
+      CITIZEN: { email: "nasir21b@gmail.com", password: "Ab@12345" },
       STAFF: { email: "staff@gmail.com", password: "passwordA@123" },
       ADMIN: { email: "testeradmin@gmail.com", password: "tester@Admin12345" },
     };

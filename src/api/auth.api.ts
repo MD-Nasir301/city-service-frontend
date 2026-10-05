@@ -31,6 +31,9 @@ export const userLogout = async () => {
     method: "POST",
   });
 };
+export const getMe = async () => {
+  return await apiClient("/users/me");
+};
 
 export const googleOAuth = async (payload: { idToken: string }) => {
   return await apiClient("/auth/google", {

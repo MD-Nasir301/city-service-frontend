@@ -277,9 +277,9 @@ export function RegisterForm() {
           </Button>
         </FieldGroup>
       </form>
-      <p className="py-2">
+      <div className="py-2">
         <FieldSeparator>Or</FieldSeparator>
-      </p>
+      </div>
 
       <div className="px-6">
         <GoogleLogin
