@@ -1,9 +1,25 @@
 import { RegisterForm } from "@/components/form/register-form";
+import Image from "next/image";
+import Link from "next/link"; 
 
 export default function RegisterPage() {
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <RegisterForm />
-    </main>
+    <div className="min-h-svh flex flex-col justify-center items-center p-6 md:p-10">
+      <div className="flex justify-center mb-15">
+        <Link href="/" className="flex items-center gap-2 font-medium">
+          <Image
+            src="/logo.jpg"
+            alt="City Service Portal Logo"
+            width={50}
+            height={50}
+            className="object-contain"
+          />
+          <span className="text-2xl text-green-600">City Service Portal</span>
+        </Link>
+      </div>
+      <div className="w-full max-w-[410px] space-y-6 border-2 p-4 rounded-2xl shadow-2xl">
+        <RegisterForm />
+      </div>
+    </div>
   );
 }

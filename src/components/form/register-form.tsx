@@ -81,7 +81,7 @@ export function RegisterForm() {
   });
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-2">
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold tracking-tight">
           Create a Citizen Account
@@ -277,8 +277,9 @@ export function RegisterForm() {
           </Button>
         </FieldGroup>
       </form>
-
-      <FieldSeparator>Or</FieldSeparator>
+      <p className="py-2">
+        <FieldSeparator>Or</FieldSeparator>
+      </p>
 
       <div className="px-6">
         <GoogleLogin
