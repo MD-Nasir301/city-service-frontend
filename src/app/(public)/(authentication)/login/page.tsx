@@ -18,7 +18,7 @@ export default function LoginPage() {
           <span className="text-2xl text-green-600">City Service Portal</span>
         </Link>
       </div>
-      <div className="w-full max-w-sm space-y-6  border-2 p-4 rounded-2xl  shadow-2xl">
+      <div className="w-full max-w-[410px] space-y-6  border-2 p-4 rounded-2xl  shadow-2xl">
         <Suspense fallback={<p className="text-center">Loading...</p>}>
           <LoginForm />
         </Suspense>

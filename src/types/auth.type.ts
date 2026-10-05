@@ -19,3 +19,5 @@ export interface AuthResponseData {
   accessToken: string;
   refreshToken: string;
 }
+
+export type Role =  "CITIZEN" | "STAFF" | "ADMIN"
