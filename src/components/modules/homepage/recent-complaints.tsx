@@ -1,16 +1,18 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ArrowRight, FileText } from "lucide-react";
+import { ArrowRight, FileText, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ComplaintCard } from "@/components/card/complaint-card";
 import { useGetAllServiceRequests } from "@/hooks/service-request.hook";
-import { ServiceRequestItem } from "@/types/services-request.type";
+import { IServiceRequestUI } from "@/types/services-request.type";
+import { error } from "console";
+import { da } from "zod/locales";
+
 
 export function RecentComplaints() {
   const router = useRouter();
 
-  // হোম পেজের জন্য শুধুমাত্র সর্বশেষ ৩টি রিকোয়েস্ট ফেচ করব
   const { data, isLoading, isError } = useGetAllServiceRequests({
     limit: "15",
     sortBy: "createdAt",
@@ -48,8 +50,19 @@ export function RecentComplaints() {
         </div>
 
         {/* Complaints Grid */}
+        {isLoading && (
+          <div className="flex items-center justify-center h-32">
+            <Loader2 className="animate-spin m-2" />
+            <p className="text-muted-foreground ">Loading complaints...</p>
+          </div>
+        )}
+        {isError && (
+          <div className="flex items-center justify-center h-32">
+            <p className="font-bold text-2xl text-red-600 ">Failed to load complaints. ! ! !</p>
+          </div>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {complaints.map((item : ServiceRequestItem) => (
+          {complaints.map((item : IServiceRequestUI) => (
             <ComplaintCard
               key={item.id}
               complaint={item}
