@@ -9,7 +9,6 @@ import { IServiceRequestUI } from "@/types/services-request.type";
 import { error } from "console";
 import { da } from "zod/locales";
 
-
 export function RecentComplaints() {
   const router = useRouter();
 
@@ -25,8 +24,8 @@ export function RecentComplaints() {
     <section className="py-16 bg-slate-50/50 dark:bg-slate-950/50">
       <div className="container px-4 md:px-8 mx-auto space-y-8">
         {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-          <div className="space-y-1 shadow-md rounded-2xl p-3">
+        <div className="sm:flex-row sm:items-end ">
+          <div className="space-y-1 shadow-lg shadow-blue-200 rounded-2xl p-3">
             <div className="flex items-center gap-2 text-green-400 font-bold text-xs uppercase tracking-wider">
               <FileText className="size-4" />
               <span>Community Feed</span>
@@ -38,15 +37,6 @@ export function RecentComplaints() {
               Check real-time updates on reported issues around the city.
             </p>
           </div>
-
-          <Button
-            variant="outline"
-            onClick={() => router.push("/public-requests")}
-            className="rounded-xl gap-2 font-semibold shrink-0"
-          >
-            See All Complaints
-            <ArrowRight className="size-4" />
-          </Button>
         </div>
 
         {/* Complaints Grid */}
@@ -58,17 +48,29 @@ export function RecentComplaints() {
         )}
         {isError && (
           <div className="flex items-center justify-center h-32">
-            <p className="font-bold text-2xl text-red-600 ">Failed to load complaints. ! ! !</p>
+            <p className="font-bold text-2xl text-red-600 ">
+              Failed to load complaints. ! ! !
+            </p>
           </div>
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {complaints.map((item : IServiceRequestUI) => (
+          {complaints.map((item: IServiceRequestUI) => (
             <ComplaintCard
               key={item.id}
               complaint={item}
               onClick={() => router.push(`/public-requests/${item.id}`)}
             />
           ))}
+        </div>
+        <div className="flex justify-end">
+          <Button
+            variant="outline"
+            onClick={() => router.push("/public-requests")}
+            className="rounded-xl ml-auto bg-green-500 text-white font-semibold shrink-0"
+          >
+            See All Complaints
+            <ArrowRight className="size-4" />
+          </Button>
         </div>
       </div>
     </section>

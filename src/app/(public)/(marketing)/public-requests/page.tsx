@@ -9,7 +9,7 @@ export default function PublicRequestsPage() {
 
       <div className="space-y-1 shadow-md rounded-2xl p-3">
         <h2 className="text-2xl sm:text-3xl font-extrabold border-l-8 border-orange-400 pl-3 text-green-500 my-2">
-          Recent Public Complaints
+          Public Requests
         </h2>
         <p className="text-sm md:text-base text-muted-foreground max-w-2xl">
           Explore, filter, and track all community-reported service requests and

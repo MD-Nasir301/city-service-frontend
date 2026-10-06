@@ -38,7 +38,7 @@ export function Header() {
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "Services", href: "/services" },
-    { name: "Public Complaints", href: "/public-requests" },
+    { name: "Public Requests", href: "/public-requests" },
     { name: "About Us", href: "/about" },
     { name: "Contact", href: "/contact" },
   ];
@@ -67,12 +67,12 @@ export function Header() {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-3 lg:gap-8">
+        <nav className="hidden md:flex items-center lg:-ml-30 gap-3 lg:gap-8">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm  font-medium text-muted-foreground hover:text-primary transition-colors"
+              className="text-sm font-bold text-violet-400 hover:text-primary transition-colors"
             >
               {link.name}
             </Link>

@@ -21,15 +21,11 @@ export function HeroSection() {
     <section className="relative overflow-hidden  from-green-50/50 via-background to-background py-4 md:py-4 border-b">
       <div className="container px-4 md:px-8 mx-auto flex flex-col items-center text-center space-y-6 max-w-4xl">
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 rounded-full border bg-background px-1 py-1 text-xs font-semibold text-green-700 shadow-sm">
-          <Sparkles className="size-3.5 fill-green-600 text-green-600" />
-          <span>Smart City Governance Portal</span>
-        </div>
 
         {/* Title */}
         <h1 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight text-foreground leading-tight">
           Report City Issues, <br className="hidden sm:inline" />
-          <span className="text-green-600">Track Progress Together</span>
+          <span className="text-violet-400">Track Progress Together</span>
         </h1>
 
         {/* Subtitle */}
@@ -77,10 +73,10 @@ export function HeroSection() {
           <Button
             size="lg"
             variant="outline"
-            onClick={() => router.push("/services")}
+            onClick={() => router.push("/public-requests")}
             className="rounded-xl font-semibold"
           >
-            View Public Complaints
+            View Public Requests
           </Button>
         </div>
       </div>
