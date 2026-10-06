@@ -25,6 +25,8 @@ export function Header() {
         toast.success("Logged out successfully");
         setIsProfileOpen(false);
         setIsMenuOpen(false);
+        queryClient.clear();
+        queryClient.invalidateQueries({ queryKey: ["service-requests"] });
         queryClient.removeQueries({ queryKey: ["user"] });
       },
       onError: (error: any) => {

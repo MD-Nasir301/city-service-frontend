@@ -1,0 +1,23 @@
+import apiClient from "@/lib/apiClient";
+import { ServiceRequestQueryParams } from "@/types/services-request.type";
+
+export const getAllServiceRequests = async (
+  params?: ServiceRequestQueryParams,
+) => {
+  const queryParams = new URLSearchParams();
+
+  if (params) {
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== "" && value !== null) {
+        queryParams.append(key, value);
+      }
+    });
+  }
+
+  return await apiClient(`/service-request?${queryParams.toString()}`, {
+    method: "GET",
+  });
+};
+
+
+
