@@ -111,9 +111,9 @@ export function ComplaintCard({ complaint, onClick }: ComplaintCardProps) {
                 {complaint.category.name}
               </span>
             )}
-            {complaint.priority && getPriorityBadge(complaint.priority)}
           </div>
-
+          {complaint.priority && getPriorityBadge(complaint.priority)}
+          {complaint.category?.type && <Badge>{complaint.category.type}</Badge>}
           {getStatusBadge(complaint.status)}
         </div>
 

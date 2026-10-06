@@ -13,14 +13,13 @@ export function HeroSection() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      router.push(`/public-requests?search=${encodeURIComponent(searchQuery.trim())}`);
+      router.push(`/services?search=${encodeURIComponent(searchQuery.trim())}`);
     }
   };
 
   return (
     <section className="relative overflow-hidden  from-green-50/50 via-background to-background py-4 md:py-4 border-b">
       <div className="container px-4 md:px-8 mx-auto flex flex-col items-center text-center space-y-6 max-w-4xl">
-        
         {/* Badge */}
         <div className="inline-flex items-center gap-2 rounded-full border bg-background px-1 py-1 text-xs font-semibold text-green-700 shadow-sm">
           <Sparkles className="size-3.5 fill-green-600 text-green-600" />
@@ -35,12 +34,16 @@ export function HeroSection() {
 
         {/* Subtitle */}
         <p className="text-muted-foreground text-sm sm:text-base max-w-2xl leading-relaxed">
-          Submit public complaints or request premium municipal services in a few clicks. 
-          Help us build a cleaner, safer, and smarter city environment for everyone.
+          Submit public complaints or request premium municipal services in a
+          few clicks. Help us build a cleaner, safer, and smarter city
+          environment for everyone.
         </p>
 
         {/* Quick Search Bar */}
-        <form onSubmit={handleSearch} className="w-full max-w-xl flex items-center gap-2 pt-2">
+        <form
+          onSubmit={handleSearch}
+          className="w-full max-w-xl flex items-center gap-2 pt-2"
+        >
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <Input
@@ -51,7 +54,11 @@ export function HeroSection() {
               className="pl-9 h-11 bg-background shadow-sm rounded-xl"
             />
           </div>
-          <Button type="submit" size="lg" className="h-11 rounded-xl px-6 bg-green-600 hover:bg-green-700 text-white">
+          <Button
+            type="submit"
+            size="lg"
+            className="h-11 rounded-xl px-6 bg-green-600 hover:bg-green-700 text-white"
+          >
             Search
           </Button>
         </form>
@@ -70,13 +77,12 @@ export function HeroSection() {
           <Button
             size="lg"
             variant="outline"
-            onClick={() => router.push("/public-requests")}
+            onClick={() => router.push("/services")}
             className="rounded-xl font-semibold"
           >
             View Public Complaints
           </Button>
         </div>
-
       </div>
     </section>
   );
