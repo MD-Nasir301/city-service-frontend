@@ -25,7 +25,7 @@ export function RecentComplaints() {
       <div className="container px-4 md:px-8 mx-auto space-y-8">
         {/* Section Header */}
         <div className="sm:flex-row sm:items-end ">
-          <div className="space-y-1 shadow-lg shadow-blue-200 rounded-2xl p-3">
+          <div className="space-y-1 shadow-md shadow-blue-200 rounded-2xl p-3">
             <div className="flex items-center gap-2 text-green-400 font-bold text-xs uppercase tracking-wider">
               <FileText className="size-4" />
               <span>Community Feed</span>

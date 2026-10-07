@@ -1,5 +1,7 @@
 // src/types/service-request.type.ts
 
+import { CreateServiceRequestInput } from "@/validation/service.validation";
+
 export type RequestStatus =
   | "PENDING"
   | "ASSIGNED"
@@ -38,7 +40,7 @@ export interface IServiceRequestUI {
   category?: {
     id: string;
     name: string;
-    type: CategoryType; 
+    type: CategoryType;
   } | null;
 
   citizen?: {
@@ -59,12 +61,10 @@ export interface IServiceRequestUI {
   }>;
 }
 
-
 export interface ComplaintCardProps {
-  complaint: IServiceRequestUI; 
+  complaint: IServiceRequestUI;
   onClick?: () => void;
 }
-
 
 export interface ServiceRequestQueryParams {
   search?: string;
@@ -76,4 +76,12 @@ export interface ServiceRequestQueryParams {
   limit?: string | number;
   sortBy?: string;
   sortOrder?: "asc" | "desc";
+}
+
+export type ICreateServiceRequestPayload = CreateServiceRequestInput;
+
+export interface ICreateServiceRequestApiResponse {
+  success: boolean;
+  message: string;
+  data: IServiceRequestUI;
 }

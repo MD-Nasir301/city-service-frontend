@@ -7,7 +7,7 @@ export default function PublicRequestsPage() {
     <main className="container min-h-screen px-4 md:px-8 mx-auto py-8 space-y-8">
       {/* Header & Hero Info Section */}
 
-      <div className="space-y-1 shadow-md rounded-2xl p-3">
+      <div className="space-y-1 rounded-2xl p-3 shadow-md shadow-blue-200">
         <h2 className="text-2xl sm:text-3xl font-extrabold border-l-8 border-orange-400 pl-3 text-green-500 my-2">
           Public Requests
         </h2>

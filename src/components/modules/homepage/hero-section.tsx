@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { Search, AlertCircle, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useGetMe } from "@/hooks/auth.hook";
+import { toast } from "sonner";
 
 export function HeroSection() {
   const router = useRouter();
@@ -13,7 +15,9 @@ export function HeroSection() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      router.push(`/services?search=${encodeURIComponent(searchQuery.trim())}`);
+      router.push(
+        `/public-requests?search=${encodeURIComponent(searchQuery.trim())}`,
+      );
     }
   };
 
@@ -63,7 +67,7 @@ export function HeroSection() {
         <div className="flex flex-wrap items-center justify-center gap-3 pt-4">
           <Button
             size="lg"
-            onClick={() => router.push("/services")}
+            onClick={() => router.push("/create-request")}
             className="rounded-xl font-semibold gap-2 shadow-md bg-green-600 hover:bg-green-700 text-white"
           >
             <AlertCircle className="size-4" />
