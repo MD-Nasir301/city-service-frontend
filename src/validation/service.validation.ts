@@ -1,4 +1,3 @@
-
 import { z } from "zod";
 
 export const createServiceRequestSchema = z
@@ -14,13 +13,21 @@ export const createServiceRequestSchema = z
     address: z.string().min(5, "Address must be at least 5 characters"),
     latitude: z.number().optional().nullable(),
     longitude: z.number().optional().nullable(),
-    images: z.array(z.string().url("Invalid image URL")).default([]),
-    priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"], {
-      required_error: "Please select a priority level",
-    }),
-    quantity: z.number().min(1, "Quantity must be at least 1").default(1),
-    preferredStartDate: z.string().optional().nullable(),
-    preferredEndDate: z.string().optional().nullable(),
+    images: z.array(z.string().url("Invalid image URL")),
+    priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]),
+    quantity: z.number().min(1, "Quantity must be at least 1"),
+    preferredStartDate: z
+      .string()
+      .datetime("Invalid ISO date format")
+      .or(z.literal(""))
+      .optional()
+      .nullable(),
+    preferredEndDate: z
+      .string()
+      .datetime("Invalid ISO date format")
+      .or(z.literal(""))
+      .optional()
+      .nullable(),
   })
   .refine(
     (data) => {

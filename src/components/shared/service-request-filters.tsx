@@ -12,7 +12,6 @@ import {
 import { Button } from "../ui/button";
 import { RotateCcw, Search, SlidersHorizontal } from "lucide-react";
 
-
 export function ServiceRequestFilters() {
   const router = useRouter();
   const pathname = usePathname();
@@ -84,7 +83,7 @@ export function ServiceRequestFilters() {
         <label className="text-xs font-semibold text-foreground">Status</label>
         <Select
           value={currentStatus}
-          onValueChange={(val) => handleFilterChange("status", val)}
+          onValueChange={(val) => handleFilterChange("status", val as string)}
         >
           <SelectTrigger className="h-9 text-xs rounded-lg w-full">
             <SelectValue placeholder="All Status" />
@@ -105,7 +104,7 @@ export function ServiceRequestFilters() {
         </label>
         <Select
           value={currentType}
-          onValueChange={(val) => handleFilterChange("type", val)}
+          onValueChange={(val) => handleFilterChange("type", val as string)}
         >
           <SelectTrigger className="h-9 text-xs rounded-lg w-full">
             <SelectValue placeholder="All Types" />
@@ -125,7 +124,7 @@ export function ServiceRequestFilters() {
         </label>
         <Select
           value={currentPriority}
-          onValueChange={(val) => handleFilterChange("priority", val)}
+          onValueChange={(val) => handleFilterChange("priority", val as string)}
         >
           <SelectTrigger className="h-9 text-xs rounded-lg w-full">
             <SelectValue placeholder="All Priority" />
@@ -145,7 +144,7 @@ export function ServiceRequestFilters() {
         <label className="text-xs font-semibold text-foreground">Sort By</label>
         <Select
           value={currentSortBy}
-          onValueChange={(val) => handleFilterChange("sortBy", val)}
+          onValueChange={(val) => handleFilterChange("sortBy", val as string)}
         >
           <SelectTrigger className="h-9 text-xs rounded-lg w-full">
             <SelectValue placeholder="Sort By" />

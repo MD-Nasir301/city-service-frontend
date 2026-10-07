@@ -13,7 +13,6 @@ import {
   Send,
   UploadCloud,
   X,
-  Layers,
   Calculator,
   Compass,
 } from "lucide-react";
@@ -165,18 +164,6 @@ export function CreateServiceRequestForm({
 
   return (
     <div className="w-full max-w-4xl mx-auto p-4 sm:p-6 bg-card rounded-xl border border-border shadow-sm">
-      <div className="flex flex-col gap-1 mb-6 border-b pb-4">
-        <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-          <Layers className="size-6 text-primary" />
-          {isUpdateMode ? "Update Service Request" : "Create Service Request"}
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          {isUpdateMode
-            ? "Modify the required fields below to update your existing request."
-            : "Fill out all required details to submit a new service request or complaint."}
-        </p>
-      </div>
-
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -238,7 +225,7 @@ export function CreateServiceRequestForm({
                       </FieldLabel>
                       <Select
                         value={field.state.value}
-                        onValueChange={(val) => field.handleChange(val)}
+                        onValueChange={(val) => field.handleChange(val as string)}
                         disabled={isLoadingCategories}
                       >
                         <SelectTrigger className="h-10 text-sm rounded-lg w-full">
