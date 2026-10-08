@@ -13,7 +13,7 @@ export function RecentComplaints() {
   const router = useRouter();
 
   const { data, isLoading, isError } = useGetAllServiceRequests({
-    limit: "15",
+    limit: "6",
     sortBy: "createdAt",
     sortOrder: "desc",
   });

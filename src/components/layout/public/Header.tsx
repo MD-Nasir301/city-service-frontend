@@ -44,10 +44,12 @@ export function Header() {
   ];
 
   const getDashboardPath = () => {
-    if (!user) return "/dashboard";
-    if (user?.role === "ADMIN" || user?.role === "SUPER_ADMIN") return "/admin";
-    if (user?.role === "STAFF") return "/staff";
-    return "/dashboard";
+    if (!user) return "/login";
+    if (user?.role === "CITIZEN") return "/citizen-dashboard";
+    if (user?.role === "ADMIN" || user?.role === "SUPER_ADMIN")
+      return "/admin-dashboard";
+    if (user?.role === "STAFF") return "/staff-dashboard";
+    return "/login";
   };
 
   return (
