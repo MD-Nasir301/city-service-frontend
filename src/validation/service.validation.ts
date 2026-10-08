@@ -43,3 +43,20 @@ export const createServiceRequestSchema = z
   );
 
 export type CreateServiceRequestInput = z.infer<typeof createServiceRequestSchema>;
+
+// src/validation/service.validation.ts
+import { z } from "zod";
+
+export const updateServiceRequestSchema = z.object({
+  title: z.string().min(3, "Title must be at least 3 characters").optional(),
+  description: z.string().min(10, "Description must be at least 10 characters").optional(),
+  address: z.string().min(5, "Address must be at least 5 characters").optional(),
+  priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]).optional(),
+  quantity: z.number().min(1).optional(),
+  preferredStartDate: z.string().nullable().optional(),
+  preferredEndDate: z.string().nullable().optional(),
+  latitude: z.number().nullable().optional(),
+  longitude: z.number().nullable().optional(),
+});
+
+export type UpdateServiceRequestInput = z.infer<typeof updateServiceRequestSchema>;

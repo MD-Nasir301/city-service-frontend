@@ -7,7 +7,6 @@ export default function layout({ children }: { children: ReactNode }) {
     <div className="flex flex-col min-h-screen">
       <h1>This Is Dashboard Layout</h1>
       <main className="flex-1">{children}</main>
-      <Footer />
     </div>
   );
 }

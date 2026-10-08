@@ -10,8 +10,11 @@ import {
   XCircle,
   UserCheck,
   ImageIcon,
+  Edit2,
+  Trash2,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   IServiceRequestUI,
   Priority,
@@ -21,10 +24,20 @@ import {
 interface ComplaintCardProps {
   complaint: IServiceRequestUI;
   onClick?: () => void;
+  showActions?: boolean; 
+  onEdit?: (e: React.MouseEvent, id: string) => void;
+  onDelete?: (e: React.MouseEvent, id: string) => void;
+  isDeleting?: boolean;
 }
 
-export function ComplaintCard({ complaint, onClick }: ComplaintCardProps) {
-  // ১. Status Badge Helper
+export function ComplaintCard({
+  complaint,
+  onClick,
+  showActions = false,
+  onEdit,
+  onDelete,
+  isDeleting,
+}: ComplaintCardProps) {
   const getStatusBadge = (status: RequestStatus) => {
     switch (status) {
       case "RESOLVED":
@@ -70,7 +83,6 @@ export function ComplaintCard({ complaint, onClick }: ComplaintCardProps) {
     }
   };
 
-  // ২. Priority Color Helper
   const getPriorityBadge = (priority: Priority) => {
     switch (priority) {
       case "URGENT":
@@ -96,6 +108,7 @@ export function ComplaintCard({ complaint, onClick }: ComplaintCardProps) {
   };
 
   const hasImages = complaint.images && complaint.images.length > 0;
+  const isEditable = complaint.status === "PENDING"; // শুধুমাত্র PENDING অবস্থা থাকলে Edit সম্ভব
 
   return (
     <div
@@ -127,7 +140,7 @@ export function ComplaintCard({ complaint, onClick }: ComplaintCardProps) {
           {complaint.description}
         </p>
 
-        {/*  Image Section */}
+        {/* Image Section */}
         <div className="relative w-full h-32 rounded-xl overflow-hidden border bg-muted/30">
           <Image
             src={hasImages ? complaint.images[0] : "/logo.jpg"}
@@ -173,25 +186,63 @@ export function ComplaintCard({ complaint, onClick }: ComplaintCardProps) {
       </div>
 
       {/* Footer Info */}
-      <div className="mt-4 pt-3 border-t flex items-center justify-between text-[11px] text-muted-foreground">
-        {complaint.address && (
-          <div className="flex items-center gap-1 truncate max-w-[180px]">
-            <MapPin className="size-3.5 text-red-500 shrink-0" />
-            <span className="truncate" title={complaint.address}>
-              {complaint.address}
+      <div className="mt-4 pt-3 border-t flex flex-col gap-3">
+        <div className="flex items-center justify-between text-[11px] text-muted-foreground">
+          {complaint.address && (
+            <div className="flex items-center gap-1 truncate max-w-[180px]">
+              <MapPin className="size-3.5 text-red-500 shrink-0" />
+              <span className="truncate" title={complaint.address}>
+                {complaint.address}
+              </span>
+            </div>
+          )}
+
+          <div className="flex items-center gap-1 shrink-0 ml-auto">
+            <Calendar className="size-3.5" />
+            <span>
+              {new Date(complaint.createdAt).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+              })}
             </span>
           </div>
-        )}
-
-        <div className="flex items-center gap-1 shrink-0 ml-auto">
-          <Calendar className="size-3.5" />
-          <span>
-            {new Date(complaint.createdAt).toLocaleDateString("en-US", {
-              month: "short",
-              day: "numeric",
-            })}
-          </span>
         </div>
+
+        {/* Action Buttons  */}
+        {showActions && (
+          <div className="flex items-center justify-end gap-2 pt-2 border-t">
+            {isEditable ? (
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-1 h-7 text-xs"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdit?.(e, complaint.id);
+                }}
+              >
+                <Edit2 className="size-3" /> Edit
+              </Button>
+            ) : (
+              <span className="text-[10px] text-muted-foreground italic mr-auto">
+                Read-only
+              </span>
+            )}
+
+            <Button
+              variant="destructive"
+              size="sm"
+              disabled={isDeleting || !isEditable}
+              className="gap-1 h-7 text-xs"
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete?.(e, complaint.id);
+              }}
+            >
+              <Trash2 className="size-3" /> Cancel
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

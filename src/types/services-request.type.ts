@@ -1,6 +1,6 @@
-// src/types/service-request.type.ts
 
 import { CreateServiceRequestInput } from "@/validation/service.validation";
+import { UpdateServiceRequestInput } from "@/validation/service.validation";
 
 export type RequestStatus =
   | "PENDING"
@@ -61,11 +61,6 @@ export interface IServiceRequestUI {
   }>;
 }
 
-export interface ComplaintCardProps {
-  complaint: IServiceRequestUI;
-  onClick?: () => void;
-}
-
 export interface ServiceRequestQueryParams {
   search?: string;
   status?: RequestStatus;
@@ -79,8 +74,23 @@ export interface ServiceRequestQueryParams {
 }
 
 export type ICreateServiceRequestPayload = CreateServiceRequestInput;
+export type IUpdateServiceRequestPayload = UpdateServiceRequestInput;
 
-export interface ICreateServiceRequestApiResponse {
+export interface IServiceRequestMeta {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
+export interface IGetMyRequestsApiResponse {
+  success: boolean;
+  message: string;
+  data: IServiceRequestUI[];
+  meta?: IServiceRequestMeta;
+}
+
+export interface IGetSingleRequestApiResponse {
   success: boolean;
   message: string;
   data: IServiceRequestUI;
