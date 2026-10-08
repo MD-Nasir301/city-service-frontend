@@ -10,69 +10,59 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarRail,
 } from "@/components/ui/sidebar";
-import { useGetMe } from "@/hooks/auth.hook";
-import { adminRoutes, citizenRoutes, staffRoutes } from "@/routes";
+
+import { adminRoutes, citizenRoutes, staffRoutes } from "@/routes"; 
+import { Role } from "@/types/auth.type";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-interface AppSidebarProps {
-  userRole?: "ADMIN" | "SUPER_ADMIN" | "STAFF" | "CITIZEN";
-}
 
-export function AppSidebar({ userRole = "CITIZEN" }: AppSidebarProps) {
+const sidebarRoutes: Record<string, any> = {
+  SUPER_ADMIN: adminRoutes,
+  ADMIN: adminRoutes,
+  STAFF: staffRoutes,
+  CITIZEN: citizenRoutes,
+};
+
+export function DashboardSidebar({ role }: { role: Role }) {
   const pathname = usePathname();
-
-  const getRoutes = () => {
-    switch (userRole) {
-      case "ADMIN":
-      case "SUPER_ADMIN":
-        return adminRoutes;
-      case "STAFF":
-        return staffRoutes;
-      case "CITIZEN":
-      default:
-        return citizenRoutes;
-    }
-  };
-
-  const routes = getRoutes();
+  const routes = sidebarRoutes[role] || citizenRoutes;
 
   return (
     <Sidebar>
-      <SidebarHeader className="border-b p-4">
-        <h2 className="text-lg font-bold tracking-tight">
-          {userRole === "ADMIN" || userRole === "SUPER_ADMIN"
-            ? "Admin Panel"
-            : userRole === "STAFF"
-              ? "Staff Portal"
-              : "CitizenCare"}
-        </h2>
+      <SidebarHeader>
+        <Link href="/">
+          <div className="flex items-center gap-2 p-2">
+            <span className="text-xl font-bold tracking-tight text-primary">
+              CitizenCare
+            </span>
+          </div>
+        </Link>
       </SidebarHeader>
-
       <SidebarContent>
-        {routes.map((group, index) => (
-          <SidebarGroup key={index}>
+        {routes.map((group: any) => (
+          <SidebarGroup key={group.title}>
             <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {group.items.map((item) => {
-                  const isActive = pathname === item.url;
-                  return (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild isActive={isActive}>
-                        <Link href={item.url}>
-                          <span>{item.title}</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  );
-                })}
+                {group.items.map((item: any) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      render={<Link href={item.url} />}
+                      isActive={pathname === item.url}
+                    >
+                      {item.title}
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
         ))}
       </SidebarContent>
+      <SidebarRail />
     </Sidebar>
   );
 }

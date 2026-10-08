@@ -20,4 +20,4 @@ export interface AuthResponseData {
   refreshToken: string;
 }
 
-export type Role =  "CITIZEN" | "STAFF" | "ADMIN"
+export type Role =  "CITIZEN" | "STAFF" | "ADMIN" | "SUPER_ADMIN"
