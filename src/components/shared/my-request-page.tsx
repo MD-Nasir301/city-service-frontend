@@ -28,7 +28,7 @@ export default function MyRequestsPage() {
 
   // ১. State management for Update Modal
   const [selectedRequestId, setSelectedRequestId] = useState<string | null>(
-    null
+    null,
   );
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
@@ -51,21 +51,24 @@ export default function MyRequestsPage() {
   };
 
   // Handle Delete Action
-const handleDeleteClick = (e: React.MouseEvent, id: string) => {
-  e.stopPropagation(); // 
+  const handleDeleteClick = (e: React.MouseEvent, id: string) => {
+    e.stopPropagation(); //
 
-  if (confirm("Are you sure you want to cancel this request?")) {
-    deleteRequest(id, {
-      onSuccess: () => {
-
-        toast.success("Service request cancelled successfully");
-      },
-      onError: (err: any) => {
-        toast.error(err?.response?.data?.message || err?.message || "Failed to cancel request");
-      },
-    });
-  }
-};
+    if (confirm("Are you sure you want to cancel this request?")) {
+      deleteRequest(id, {
+        onSuccess: () => {
+          toast.success("Service request cancelled successfully");
+        },
+        onError: (err: any) => {
+          toast.error(
+            err?.response?.data?.message ||
+              err?.message ||
+              "Failed to cancel request",
+          );
+        },
+      });
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-6 md:px-8 md:py-8 max-w-7xl space-y-6">

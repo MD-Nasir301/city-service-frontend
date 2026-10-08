@@ -35,8 +35,8 @@ export function DashboardSidebar({ role }: { role: Role }) {
       <SidebarHeader>
         <Link href="/">
           <div className="flex items-center gap-2 p-2">
-            <span className="text-xl font-bold tracking-tight text-primary">
-              CitizenCare
+            <span className="text-xl font-bold tracking-tight text-primary capitalize">
+             {role.toLowerCase()} Panel
             </span>
           </div>
         </Link>

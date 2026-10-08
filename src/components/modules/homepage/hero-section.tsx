@@ -21,6 +21,30 @@ export function HeroSection() {
     }
   };
 
+  const { data: userResponse } = useGetMe();
+
+  const role = userResponse?.data?.role;
+
+  const handleCreateRequest = () => {
+    if (!role) {
+      router.push("/login");
+      return;
+    }
+    if (role === "STAFF") {
+      toast.error(
+        "Staff members cannot submit requests. Please log in as a Citizen.",
+      );
+      return;
+    }
+
+    if (role === "ADMIN" || role === "SUPER_ADMIN") {
+      router.push("/admin-dashboard/create-request");
+    }
+    if (role === "CITIZEN") {
+      router.push("/citizen-dashboard/create-request");
+    }
+  };
+
   return (
     <section className="relative overflow-hidden  from-green-50/50 via-background to-background py-4 md:py-4 border-b">
       <div className="container px-4 md:px-8 mx-auto flex flex-col items-center text-center space-y-6 max-w-4xl">
@@ -67,7 +91,7 @@ export function HeroSection() {
         <div className="flex flex-wrap items-center justify-center gap-3 pt-4">
           <Button
             size="lg"
-            onClick={() => router.push("/create-request")}
+            onClick={handleCreateRequest}
             className="rounded-xl font-semibold gap-2 shadow-md bg-green-600 hover:bg-green-700 text-white"
           >
             <AlertCircle className="size-4" />
