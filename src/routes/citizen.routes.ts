@@ -6,6 +6,7 @@ export const citizenRoutes = [
     items: [
       { title: "Overview", url: `${prefix}` },
       { title: "My Requests", url: `${prefix}/my-requests` },
+      { title: "Payment & Tracking", url: `${prefix}/payment&tracking` },
       { title: "Create Request", url: `${prefix}/create-request` },
     ],
   },
