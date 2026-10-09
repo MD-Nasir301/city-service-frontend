@@ -26,7 +26,7 @@ export const useGetAllServiceRequests = (
   });
 };
 
-//  Create Service Request
+// Create Service Request
 export const useCreateServiceRequest = () => {
   const queryClient = useQueryClient();
 
@@ -40,7 +40,7 @@ export const useCreateServiceRequest = () => {
   });
 };
 
-//  Get My Requests
+// Get My Requests
 export const useGetMyRequests = (params?: ServiceRequestQueryParams) => {
   return useQuery({
     queryKey: ["my-requests", params],
@@ -130,8 +130,3 @@ export const useUpdateStaffRequestStatus = () => {
     },
   });
 };
-
-
-
-
-

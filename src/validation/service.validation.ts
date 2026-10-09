@@ -14,7 +14,7 @@ export const createServiceRequestSchema = z
     priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]).optional(),
     quantity: z.number().min(1, "Quantity must be at least 1").optional(),
     
-    // HTML datetime-local string (2026-10-09T14:22) এবং খালি স্ট্রিং পাস করানোর জন্য
+    // HTML datetime-local string (2026-10-09T14:22) 
     preferredStartDate: z
       .string()
       .optional()
@@ -82,3 +82,7 @@ export const updateServiceRequestSchema = z.object({
   latitude: z.number().nullable().optional(),
   longitude: z.number().nullable().optional(),
 });
+
+export type UpdateServiceRequestInput = z.infer<
+  typeof updateServiceRequestSchema
+>;

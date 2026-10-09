@@ -22,20 +22,32 @@ import {
 import { ComplaintCard } from "@/components/card/complaint-card";
 import { CreateServiceRequestForm } from "@/components/form/create-service-request-form";
 import { IServiceRequestUI } from "@/types/services-request.type";
+import { useGetMe } from "@/hooks/auth.hook";
 
 export default function MyRequestsPage() {
   const router = useRouter();
 
-  // ১. State management for Update Modal
+  // State management for Update Modal
   const [selectedRequestId, setSelectedRequestId] = useState<string | null>(
     null,
   );
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  // ২. Hooks
+  //  Hooks
   const { data, isLoading, isError } = useGetMyRequests();
   const { mutate: deleteRequest, isPending: isDeleting } =
     useDeleteServiceRequest();
+
+  // route prefix
+  const { data: userResponse } = useGetMe();
+  const user = userResponse.data;
+  let prefix = "";
+  if (user?.role === "CITIZEN") {
+    prefix = "citizen-dashboard";
+  }
+  if (user?.role === "ADMIN") {
+    prefix = "admin-dashboard";
+  }
 
   // Selected single request details for modal
   const { data: singleRequestData, isLoading: isLoadingSingle } =
@@ -84,7 +96,7 @@ export default function MyRequestsPage() {
         </div>
 
         <Button
-          onClick={() => router.push("/create-request")}
+          onClick={() => router.push(`/${prefix}/create-request`)}
           className="gap-2 self-start sm:self-auto"
         >
           <Plus className="size-4" /> New Request

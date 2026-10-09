@@ -1,4 +1,7 @@
-import { CreateServiceRequestInput, UpdateServiceRequestInput } from "@/validation/service.validation";
+import {
+  CreateServiceRequestInput,
+  UpdateServiceRequestInput,
+} from "@/validation/service.validation";
 
 export type RequestStatus =
   | "PENDING"
@@ -11,6 +14,30 @@ export type RequestStatus =
 
 export type Priority = "LOW" | "MEDIUM" | "HIGH" | "URGENT";
 export type CategoryType = "FREE" | "PAID";
+
+// Exporting Schema Input Payloads
+export type ICreateServiceRequestPayload = CreateServiceRequestInput;
+export type IUpdateServiceRequestPayload = UpdateServiceRequestInput;
+
+// Query Params for API Requests
+export interface ServiceRequestQueryParams {
+  search?: string;
+  status?: RequestStatus;
+  priority?: Priority;
+  type?: CategoryType;
+  categoryId?: string;
+  page?: string | number;
+  limit?: string | number;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+}
+
+export interface IServiceRequestMeta {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
 
 export interface IServiceRequestUI {
   id: string;
@@ -79,4 +106,11 @@ export interface IGetSingleRequestApiResponse {
   success: boolean;
   message: string;
   data: IServiceRequestUI;
+}
+
+export interface IGetMyRequestsApiResponse {
+  success: boolean;
+  message: string;
+  data: IServiceRequestUI[];
+  meta?: IServiceRequestMeta;
 }

@@ -16,7 +16,7 @@ export const getAllServiceRequests = async (
   if (params) {
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined && value !== "" && value !== null) {
-        queryParams.append(key, value);
+        queryParams.append(key, String(value));
       }
     });
   }
@@ -37,9 +37,20 @@ export const createServiceRequest = async (
 };
 
 export const getMyRequests = async (params?: ServiceRequestQueryParams) => {
-  const queryParams = new URLSearchParams(params as any).toString();
+  const queryParams = new URLSearchParams();
+
+  if (params) {
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== "" && value !== null) {
+        queryParams.append(key, String(value));
+      }
+    });
+  }
+
+  const queryString = queryParams.toString();
+
   return await apiClient<IGetMyRequestsApiResponse>(
-    `/service-request/my-requests${queryParams ? `?${queryParams}` : ""}`,
+    `/service-request/my-requests${queryString ? `?${queryString}` : ""}`,
     {
       method: "GET",
     },
@@ -92,21 +103,18 @@ export const updateServiceRequestStatus = async ({
     {
       method: "PATCH",
       body: { status },
-    }
+    },
   );
 };
-
-
 
 export const getStaffAssignedRequests = async () => {
   return await apiClient<{ success: boolean; data: IServiceRequestUI[] }>(
-    `/service-request/my-assigned`, 
+    `/service-request/my-assigned`,
     {
       method: "GET",
-    }
+    },
   );
 };
-
 
 export const updateRequestStatusByStaff = async ({
   requestId,
@@ -122,6 +130,6 @@ export const updateRequestStatusByStaff = async ({
     {
       method: "PATCH",
       body: { status, remarks },
-    }
+    },
   );
 };

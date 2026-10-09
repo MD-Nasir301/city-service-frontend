@@ -40,6 +40,7 @@ import { createServiceRequestSchema } from "@/validation";
 import { useCreateServiceRequest } from "@/hooks/service-request.hook";
 import { Category, CreateServiceRequestFormProps } from "@/types/category.type";
 import { useGetCategories } from "@/hooks/category.hook";
+import { useGetMe } from "@/hooks/auth.hook";
 
 export function CreateServiceRequestForm({
   isLoadingCategories = false,
@@ -114,6 +115,16 @@ export function CreateServiceRequestForm({
     setImagePreviews((prev) => prev.filter((_, i) => i !== index));
   };
 
+  // route prefix
+  const { data: userResponse } = useGetMe();
+  const user = userResponse.data;
+  let prefix = "";
+  if (user?.role === "CITIZEN") {
+    prefix = "citizen-dashboard";
+  }
+  if (user?.role === "ADMIN") {
+    prefix = "admin-dashboard";
+  }
   // Form setup
   const form = useForm({
     defaultValues,
@@ -124,9 +135,17 @@ export function CreateServiceRequestForm({
       const formData = new FormData();
 
       Object.entries(value).forEach(([key, val]) => {
-        if (key !== "images" && val !== null && val !== undefined && val !== "") {
-          // Date ফিল্ডগুলোকে সঠিক ISO String ফরম্যাটে কনভার্ট করা
-          if ((key === "preferredStartDate" || key === "preferredEndDate") && val) {
+        if (
+          key !== "images" &&
+          val !== null &&
+          val !== undefined &&
+          val !== ""
+        ) {
+          // Date convert to ISO String
+          if (
+            (key === "preferredStartDate" || key === "preferredEndDate") &&
+            val
+          ) {
             formData.append(key, new Date(val as string).toISOString());
           } else {
             formData.append(key, String(val));
@@ -156,7 +175,7 @@ export function CreateServiceRequestForm({
                 : "Your request has been submitted successfully.",
             },
           );
-          router.push("/dashboard/my-requests");
+          router.push(`/${prefix}/my-requests`);
         },
         onError: (err: any) => {
           toast.error("Submission Error", {
