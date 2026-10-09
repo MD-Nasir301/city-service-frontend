@@ -6,13 +6,14 @@ import {
   getMyRequests,
   getSingleServiceRequest,
   updateServiceRequest,
+  updateServiceRequestStatus,
 } from "@/api/service-request.api";
 import {
   ICreateServiceRequestPayload,
   ServiceRequestQueryParams,
 } from "@/types/services-request.type";
 
-// All Public Service Requests
+// Get all Service Requests
 export const useGetAllServiceRequests = (
   params?: ServiceRequestQueryParams,
 ) => {
@@ -85,6 +86,25 @@ export const useDeleteServiceRequest = () => {
       queryClient.invalidateQueries({
         predicate: (query) => query.queryKey[0] === "service-requests",
       });
+    },
+  });
+};
+
+// Update Status Mutation Hook
+export const useUpdateServiceRequestStatus = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateServiceRequestStatus,
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["my-requests"] });
+      queryClient.invalidateQueries({ queryKey: ["service-requests"] });
+      queryClient.invalidateQueries({ queryKey: ["available-staff"] });
+      if (variables?.id) {
+        queryClient.invalidateQueries({
+          queryKey: ["service-request", variables.id],
+        });
+      }
     },
   });
 };

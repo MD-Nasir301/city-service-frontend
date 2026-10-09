@@ -77,3 +77,20 @@ export const deleteServiceRequest = async (id: string) => {
     },
   );
 };
+
+export const updateServiceRequestStatus = async ({
+  id,
+  status,
+}: {
+  id: string;
+  status: string;
+}) => {
+  return await apiClient<{ success: boolean; message: string }>(
+    `/service-request/${id}/status`,
+    {
+      method: "PATCH",
+      body: { status },
+    }
+  );
+};
+

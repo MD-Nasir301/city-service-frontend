@@ -7,6 +7,7 @@ export const adminRoutes = [
       { title: "Overview", url: `${prefix}` },
       { title: "Service Requests", url: `${prefix}/service-requests` },
       { title: "Categories", url: `${prefix}/categories` },
+      { title: "My Request", url: `${prefix}/my-request` },
     ],
   },
   {
