@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -19,6 +18,7 @@ import {
   AlertCircle,
   Tag,
   Layers,
+  HardHat,
 } from "lucide-react";
 import { useGetCategories } from "@/hooks/category.hook";
 
@@ -55,19 +55,34 @@ export default function ServicesPage() {
 
   return (
     <div className="min-h-screen bg-slate-50/50 py-10 px-4 sm:px-6 lg:px-8 space-y-10">
+      {/* Under Construction Banner */}
+      <div className="max-w-5xl mx-auto bg-amber-200 border border-amber-200 rounded-xl p-4 flex items-center gap-3 text-amber-800 shadow-sm">
+        <div className="size-9 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0 text-amber-700">
+          <HardHat className="size-5" />
+        </div>
+        <div className="text-xs sm:text-sm">
+          <p className="font-bold">Page Under Development. Coming Soon . . .</p>
+          <p className="text-amber-700/80">
+            This contact form is currently in demo mode. Messaging and backend
+            API integration are under active construction.
+          </p>
+        </div>
+      </div>
       {/* 1. Header Section */}
       <div className="max-w-3xl mx-auto text-center space-y-3">
         <Badge
           variant="outline"
           className="bg-indigo-50 text-indigo-700 border-indigo-200 px-3 py-1 rounded-full text-xs font-semibold"
         >
-          <Sparkles className="size-3.5 mr-1.5 inline" /> Municipal Citizen Services
+          <Sparkles className="size-3.5 mr-1.5 inline" /> Municipal Citizen
+          Services
         </Badge>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
           Explore Civic Services
         </h1>
         <p className="text-sm sm:text-base text-slate-600 max-w-xl mx-auto">
-          Select a service category below to request immediate assistance, maintenance, or city infrastructure support.
+          Select a service category below to request immediate assistance,
+          maintenance, or city infrastructure support.
         </p>
       </div>
 
@@ -110,13 +125,19 @@ export default function ServicesPage() {
         {error ? (
           <div className="bg-rose-50 border border-rose-200 p-6 rounded-2xl text-center space-y-2">
             <AlertCircle className="size-8 text-rose-500 mx-auto" />
-            <h3 className="font-bold text-rose-800 text-sm">Failed to Load Services</h3>
-            <p className="text-xs text-rose-600">Please refresh the page or try again later.</p>
+            <h3 className="font-bold text-rose-800 text-sm">
+              Failed to Load Services
+            </h3>
+            <p className="text-xs text-rose-600">
+              Please refresh the page or try again later.
+            </p>
           </div>
         ) : filteredCategories.length === 0 ? (
           <div className="bg-white border p-12 rounded-2xl text-center space-y-3 shadow-sm">
             <Layers className="size-10 text-slate-300 mx-auto" />
-            <h3 className="font-bold text-slate-700 text-base">No Services Found</h3>
+            <h3 className="font-bold text-slate-700 text-base">
+              No Services Found
+            </h3>
             <p className="text-xs text-slate-500">
               Try adjusting your search query or switching tabs.
             </p>
@@ -146,11 +167,13 @@ export default function ServicesPage() {
                       >
                         {isPaid ? (
                           <>
-                            <CreditCard className="size-3 mr-1 inline" /> Paid Service
+                            <CreditCard className="size-3 mr-1 inline" /> Paid
+                            Service
                           </>
                         ) : (
                           <>
-                            <ShieldCheck className="size-3 mr-1 inline" /> Free Service
+                            <ShieldCheck className="size-3 mr-1 inline" /> Free
+                            Service
                           </>
                         )}
                       </Badge>

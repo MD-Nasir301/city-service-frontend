@@ -25,9 +25,10 @@ export default function ContactUsPage() {
           <HardHat className="size-5" />
         </div>
         <div className="text-xs sm:text-sm">
-          <p className="font-bold">Page Under Development</p>
+          <p className="font-bold">Page Under Development. Coming Soon . . .</p>
           <p className="text-amber-700/80">
-            This contact form is currently in demo mode. Messaging and backend API integration are under active construction.
+            This contact form is currently in demo mode. Messaging and backend
+            API integration are under active construction.
           </p>
         </div>
       </div>
@@ -41,10 +42,11 @@ export default function ContactUsPage() {
           <Sparkles className="size-3.5 mr-1.5 inline" /> Get In Touch
         </Badge>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-          How Can <span className="text-violet-500" >We Help You </span>  Today?
+          How Can <span className="text-violet-500">We Help You </span> Today?
         </h1>
         <p className="text-sm sm:text-base text-slate-600 max-w-xl mx-auto">
-          Have questions regarding civic services, service tracking, or online payments? Send us a message and our team will assist you.
+          Have questions regarding civic services, service tracking, or online
+          payments? Send us a message and our team will assist you.
         </p>
       </div>
 
@@ -57,9 +59,12 @@ export default function ContactUsPage() {
                 <Clock className="size-5" />
               </div>
               <div className="space-y-1">
-                <h3 className="font-bold text-slate-800 text-sm">Working Hours</h3>
+                <h3 className="font-bold text-slate-800 text-sm">
+                  Working Hours
+                </h3>
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Sunday - Thursday: 9:00 AM - 5:00 PM<br />
+                  Sunday - Thursday: 9:00 AM - 5:00 PM
+                  <br />
                   Emergency services remain 24/7 active.
                 </p>
               </div>
@@ -72,9 +77,12 @@ export default function ContactUsPage() {
                 <Mail className="size-5" />
               </div>
               <div className="space-y-1">
-                <h3 className="font-bold text-slate-800 text-sm">Email Support</h3>
+                <h3 className="font-bold text-slate-800 text-sm">
+                  Email Support
+                </h3>
                 <p className="text-xs text-slate-500">
-                  support@smartcity.gov.bd<br />
+                  support@smartcity.gov.bd
+                  <br />
                   Expected response within 24 hours.
                 </p>
               </div>
@@ -87,9 +95,12 @@ export default function ContactUsPage() {
                 <Phone className="size-5" />
               </div>
               <div className="space-y-1">
-                <h3 className="font-bold text-slate-800 text-sm">Helpline Center</h3>
+                <h3 className="font-bold text-slate-800 text-sm">
+                  Helpline Center
+                </h3>
                 <p className="text-xs text-slate-500">
-                  Toll-Free Hotline: 16123<br />
+                  Toll-Free Hotline: 16123
+                  <br />
                   Citizen Service Desk: +880 2 9966-0000
                 </p>
               </div>
@@ -102,7 +113,8 @@ export default function ContactUsPage() {
               <HelpCircle className="size-4" /> Need Quick Answers?
             </div>
             <p className="text-xs text-slate-300 leading-relaxed">
-              Check out your citizen dashboard to view real-time request statuses or complete pending payments instantly via Stripe.
+              Check out your citizen dashboard to view real-time request
+              statuses or complete pending payments instantly via Stripe.
             </p>
           </div>
         </div>
