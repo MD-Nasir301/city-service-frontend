@@ -277,7 +277,7 @@ export default function AdminServiceRequestsPage() {
                       {/* Title & Category Column (Clickable) */}
                       <TableCell
                         className="cursor-pointer hover:bg-slate-100/80 transition-colors group"
-                        onClick={() => router.push(`/requests/${req.id}`)}
+                        onClick={() => router.push(`/requests?id=${req.id}`)}
                       >
                         <div className="font-semibold text-slate-800 group-hover:text-indigo-600 transition-colors">
                           {req.title}

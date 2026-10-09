@@ -14,7 +14,7 @@ import { useGetMyRequests } from "@/hooks/service-request.hook";
 import CitizenRequestsTable from "@/components/modules/citizen/citizen-requests-table";
 
 export default function PaymentAndTrakingPage() {
-  const [statusFilter, setStatusFilter] = useState<string>("ALL");
+  const [statusFilter, setStatusFilter] = useState<string | null>("ALL");
   const { data: requestsData, isLoading } = useGetMyRequests();
 
   if (isLoading) {

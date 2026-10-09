@@ -58,7 +58,7 @@ export function RecentComplaints() {
             <ComplaintCard
               key={item.id}
               complaint={item}
-              onClick={() => router.push(`/requests/${item.id}`)}
+              onClick={() => router.push(`/requests?id=${item.id}`)}
             />
           ))}
         </div>

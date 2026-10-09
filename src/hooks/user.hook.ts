@@ -1,4 +1,4 @@
-import { deleteUser, deleteUserStatus, getAllUsers, updateUserRole, updateUserStatus } from "@/api/user.api";
+import { deleteUserStatus, getAllUsers, updateUserRole, updateUserStatus } from "@/api/user.api";
 import { IUserQueryParams } from "@/types/user.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 

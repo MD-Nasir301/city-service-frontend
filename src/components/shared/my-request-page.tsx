@@ -138,7 +138,7 @@ export default function MyRequestsPage() {
               key={item.id}
               complaint={item}
               showActions={true}
-              onClick={() => router.push(`/requests/${item.id}`)}
+              onClick={() =>router.push(`/requests?id=${item.id}`)}
               onEdit={handleEditClick}
               onDelete={handleDeleteClick}
               isDeleting={isDeleting}

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -42,7 +41,7 @@ export default function StaffAssignedRequestsTable({
         onError: (err: any) => {
           toast.error(err?.message || "Failed to update status.");
         },
-      }
+      },
     );
   };
 
@@ -82,7 +81,7 @@ export default function StaffAssignedRequestsTable({
                 return (
                   <TableRow key={item.id}>
                     <TableCell
-                      onClick={() => router.push(`/requests/${item.id}`)}
+                      onClick={() => router.push(`/requests?id=${item.id}`)}
                       className="hover:text-blue-500 cursor-pointer font-semibold text-slate-800"
                     >
                       {item.title}
@@ -94,9 +93,7 @@ export default function StaffAssignedRequestsTable({
 
                     {/* Service Type */}
                     <TableCell>
-                      <Badge
-                        variant={isCategoryPaid ? "default" : "secondary"}
-                      >
+                      <Badge variant={isCategoryPaid ? "default" : "secondary"}>
                         {isCategoryPaid
                           ? `Paid (৳${item.totalAmount || item.amount || 0})`
                           : "Free Service"}
@@ -204,7 +201,7 @@ export default function StaffAssignedRequestsTable({
 
                       {/* Completed / Cancelled / Rejected */}
                       {["RESOLVED", "REJECTED", "CANCELLED"].includes(
-                        item.status
+                        item.status,
                       ) && (
                         <span className="text-xs text-slate-400 font-medium">
                           No Pending Action
