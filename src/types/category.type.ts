@@ -10,6 +10,7 @@ export interface Category {
 export interface CreateServiceRequestFormProps {
   categories?: Category[];
   isLoadingCategories?: boolean;
-  initialData?: any; 
+  initialData?: any;
   isUpdateMode?: boolean;
+  onSuccess?: () => void;
 }

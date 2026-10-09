@@ -9,7 +9,10 @@ export const createServiceRequestSchema = z
       .max(100, "Title cannot exceed 100 characters"),
     description: z
       .string()
-      .min(15, "Please provide a detailed description (at least 15 characters)"),
+      .min(
+        15,
+        "Please provide a detailed description (at least 15 characters)",
+      ),
     address: z.string().min(5, "Address must be at least 5 characters"),
     latitude: z.number().optional().nullable(),
     longitude: z.number().optional().nullable(),
@@ -32,25 +35,32 @@ export const createServiceRequestSchema = z
   .refine(
     (data) => {
       if (data.preferredStartDate && data.preferredEndDate) {
-        return new Date(data.preferredEndDate) >= new Date(data.preferredStartDate);
+        return (
+          new Date(data.preferredEndDate) >= new Date(data.preferredStartDate)
+        );
       }
       return true;
     },
     {
       message: "End date cannot be earlier than start date",
       path: ["preferredEndDate"],
-    }
+    },
   );
 
-export type CreateServiceRequestInput = z.infer<typeof createServiceRequestSchema>;
-
-// src/validation/service.validation.ts
-import { z } from "zod";
+export type CreateServiceRequestInput = z.infer<
+  typeof createServiceRequestSchema
+>;
 
 export const updateServiceRequestSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters").optional(),
-  description: z.string().min(10, "Description must be at least 10 characters").optional(),
-  address: z.string().min(5, "Address must be at least 5 characters").optional(),
+  description: z
+    .string()
+    .min(10, "Description must be at least 10 characters")
+    .optional(),
+  address: z
+    .string()
+    .min(5, "Address must be at least 5 characters")
+    .optional(),
   priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]).optional(),
   quantity: z.number().min(1).optional(),
   preferredStartDate: z.string().nullable().optional(),
@@ -59,4 +69,6 @@ export const updateServiceRequestSchema = z.object({
   longitude: z.number().nullable().optional(),
 });
 
-export type UpdateServiceRequestInput = z.infer<typeof updateServiceRequestSchema>;
+export type UpdateServiceRequestInput = z.infer<
+  typeof updateServiceRequestSchema
+>;

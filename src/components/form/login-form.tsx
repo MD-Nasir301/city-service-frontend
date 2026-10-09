@@ -75,6 +75,7 @@ export function LoginForm() {
       CITIZEN: { email: "nasir21b@gmail.com", password: "Ab@12345" },
       STAFF: { email: "staff@gmail.com", password: "passwordA@123" },
       ADMIN: { email: "testeradmin@gmail.com", password: "tester@Admin12345" },
+      SUPER_ADMIN: { email: "superadmin1@gmail.com", password: "super@Admin12345" },
     };
 
     const credentials = demoCredentials[role];

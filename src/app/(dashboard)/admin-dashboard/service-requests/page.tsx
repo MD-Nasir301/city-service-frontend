@@ -35,6 +35,7 @@ import { Eye } from "lucide-react";
 import AuthLoading from "@/components/auth/auth-loading";
 import { toast } from "sonner";
 import { useGetAvailableStaffs, useAssignStaff } from "@/hooks/staff.hook";
+import { RequestStatus } from "@/types/services-request.type";
 
 // Status Badge Color Helper
 const getStatusBadge = (status: string) => {
@@ -87,17 +88,17 @@ const getStatusBadge = (status: string) => {
 };
 
 export default function AdminServiceRequestsPage() {
-  const [selectedStatusFilter, setSelectedStatusFilter] = useState<string>("ALL");
+  const [selectedStatusFilter, setSelectedStatusFilter] = useState<RequestStatus | "ALL">("ALL");
   const [selectedRequest, setSelectedRequest] = useState<any | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
 
-  // 🛠️ FIX 1: Correct query params object structure for API Hook
+  // Correct query params object structure with explicit Type Assertion
   const {
     data: requestsData,
     isLoading,
     refetch,
   } = useGetAllServiceRequests({
-    status: selectedStatusFilter === "ALL" ? undefined : selectedStatusFilter,
+    status: selectedStatusFilter === "ALL" ? undefined : (selectedStatusFilter as RequestStatus),
   });
 
   const { data: staffData } = useGetAvailableStaffs();
@@ -114,7 +115,7 @@ export default function AdminServiceRequestsPage() {
   const rawRequests = requestsData?.data || [];
   const staffList = staffData?.data || [];
 
-  // 🛠️ FIX 2: Client-side backup filtering so filter never fails
+  // Client-side backup filtering
   const requests =
     selectedStatusFilter === "ALL"
       ? rawRequests
@@ -183,7 +184,7 @@ export default function AdminServiceRequestsPage() {
           <span className="text-sm text-slate-600 font-medium">Filter Status:</span>
           <Select
             value={selectedStatusFilter}
-            onValueChange={setSelectedStatusFilter}
+            onValueChange={(val) => setSelectedStatusFilter(val as RequestStatus | "ALL")}
           >
             <SelectTrigger className="w-[160px]">
               <SelectValue placeholder="All Status" />
