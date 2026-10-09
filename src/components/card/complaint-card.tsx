@@ -20,11 +20,12 @@ import {
   Priority,
   RequestStatus,
 } from "@/types/services-request.type";
+import { useGetMe } from "@/hooks/auth.hook";
 
 interface ComplaintCardProps {
   complaint: IServiceRequestUI;
   onClick?: () => void;
-  showActions?: boolean; 
+  showActions?: boolean;
   onEdit?: (e: React.MouseEvent, id: string) => void;
   onDelete?: (e: React.MouseEvent, id: string) => void;
   isDeleting?: boolean;
@@ -107,6 +108,9 @@ export function ComplaintCard({
     }
   };
 
+  const { data: userResponse } = useGetMe();
+  const user = userResponse?.data;
+
   const hasImages = complaint.images && complaint.images.length > 0;
   const isEditable = complaint.status === "PENDING"; // শুধুমাত্র PENDING অবস্থা থাকলে Edit সম্ভব
 
@@ -165,9 +169,15 @@ export function ComplaintCard({
           {complaint.citizen?.name && (
             <div className="flex items-center gap-1.5">
               <User className="size-3.5 text-gray-400" />
-              <span className="font-medium text-gray-700 truncate max-w-[120px]">
-                {complaint.citizen.name}
-              </span>
+              {user?.name === complaint.citizen.name ? (
+                <span className="font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full text-[11px] border border-blue-200">
+                  You
+                </span>
+              ) : (
+                <span className="font-medium text-gray-700 truncate max-w-[120px]">
+                  {complaint.citizen.name}
+                </span>
+              )}
             </div>
           )}
 

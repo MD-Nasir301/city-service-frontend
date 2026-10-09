@@ -24,3 +24,18 @@ export interface ApiResponse<T> {
   message: string;
   data: T;
 }
+
+export interface IStaffDashboardStats {
+  totalAssignedRequests: number;
+  inProgressRequests: number;
+  resolvedRequests: number;
+  cancelledRequests: number;
+  rejectedRequests: number;
+}
+
+export interface IStaffDashboardStatsApiResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: IStaffDashboardStats;
+}

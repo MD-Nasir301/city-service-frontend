@@ -112,7 +112,7 @@ export function ServiceRequestFilters() {
           <SelectContent>
             <SelectItem value="ALL">All Types</SelectItem>
             <SelectItem value="FREE">FREE</SelectItem>
-            <SelectItem value="PAID">PAID</SelectItem>
+            <SelectItem value="PAID">MY PAID</SelectItem>
           </SelectContent>
         </Select>
       </div>

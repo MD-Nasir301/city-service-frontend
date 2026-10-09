@@ -64,12 +64,13 @@ export function RegisterForm() {
             });
             return;
           }
+
+          const params = new URLSearchParams({ email: registrationData.email });
+          router.push(`/register/verify-account?${params.toString()}`);
           toast.info("Verification Required", {
             description:
               "An OTP has been sent. Please verify your account to complete registration.",
           });
-          const params = new URLSearchParams({ email: registrationData.email });
-          router.push(`/register/verify-account?${params.toString()}`);
         },
         onError: (err: any) => {
           toast.error("Authorization Failure", {

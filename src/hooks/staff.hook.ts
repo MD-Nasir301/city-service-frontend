@@ -1,4 +1,4 @@
-import { assignStaff, availableStaff } from "@/api/staff.api";
+import { assignStaff, availableStaff, getStaffDashboardStats } from "@/api/staff.api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useGetAvailableStaffs = () => {
@@ -23,5 +23,15 @@ export const useAssignStaff = () => {
         });
       }
     },
+  });
+};
+
+
+
+
+export const useGetStaffDashboardStats = () => {
+  return useQuery({
+    queryKey: ["staff-dashboard-stats"],
+    queryFn: () => getStaffDashboardStats(),
   });
 };

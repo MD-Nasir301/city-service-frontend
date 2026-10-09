@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { Spinner } from "@/components/ui/spinner";
-import { ServiceRequestsContent } from "@/components/modules/servciePage/service-requests-content";
+import { ServiceRequestsContent } from "@/components/modules/publicRequestPage/service-requests-content";
 
 export default function PublicRequestsPage() {
   return (

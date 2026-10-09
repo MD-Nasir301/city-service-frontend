@@ -1,5 +1,5 @@
 import apiClient from "@/lib/apiClient";
-import { ApiResponse, AvailableStaff } from "@/types/staff.type";
+import { ApiResponse, AvailableStaff, IStaffDashboardStatsApiResponse } from "@/types/staff.type";
 
 export const availableStaff = async () => {
   return await apiClient<ApiResponse<AvailableStaff[]>>(
@@ -20,6 +20,15 @@ export const assignStaff = async ({
       method: "PATCH",
       body: { assignedStaffId, status: "ASSIGNED" },
     },
+  );
+};
+
+export const getStaffDashboardStats = async () => {
+  return await apiClient<IStaffDashboardStatsApiResponse>(
+    `/staff/dashboard-stats`, 
+    {
+      method: "GET",
+    }
   );
 };
 
