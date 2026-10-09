@@ -39,7 +39,7 @@ export function Header() {
     { name: "Home", href: "/" },
     { name: "Public Requests", href: "/public-requests" },
     { name: "Services", href: "/services" },
-    { name: "About Us", href: "/about" },
+    { name: "About Us", href: "/about-us" },
     { name: "Contact", href: "/contact" },
   ];
 
