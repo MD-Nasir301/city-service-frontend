@@ -5,6 +5,7 @@ import {
   useGetAllUsers,
   useUpdateUserRole,
   useUpdateUserStatus,
+  useDeleteUser,
 } from "@/hooks/user.hook";
 import { UserRole, UserStatus } from "@/types/user.type";
 import {
@@ -25,7 +26,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Search, Trash2 } from "lucide-react";
 import AuthLoading from "@/components/auth/auth-loading";
 import { toast } from "sonner";
 
@@ -91,6 +93,7 @@ export default function AdminUsersPage() {
   // Mutations
   const { mutate: updateRole, isPending: isUpdatingRole } = useUpdateUserRole();
   const { mutate: updateStatus, isPending: isUpdatingStatus } = useUpdateUserStatus();
+  const { mutate: deleteUser, isPending: isDeleting } = useDeleteUser();
 
   if (isLoading) {
     return <AuthLoading label="Loading Users..." />;
@@ -135,6 +138,20 @@ export default function AdminUsersPage() {
         },
       }
     );
+  };
+
+  // Soft Delete Handler
+  const handleDeleteUser = (userId: string, userName: string) => {
+    if (confirm(`Are you sure you want to delete ${userName}?`)) {
+      deleteUser(userId, {
+        onSuccess: () => {
+          toast.success("User deleted successfully!");
+        },
+        onError: (err: any) => {
+          toast.error(err?.message || "Failed to delete user.");
+        },
+      });
+    }
   };
 
   return (
@@ -216,13 +233,14 @@ export default function AdminUsersPage() {
                 <TableHead>Status</TableHead>
                 <TableHead>Joined Date</TableHead>
                 <TableHead className="text-center">Role Action</TableHead>
-                <TableHead className="text-right">Status Action</TableHead>
+                <TableHead className="text-center">Status Action</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {users.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-8 text-slate-500">
+                  <TableCell colSpan={8} className="text-center py-8 text-slate-500">
                     No users found matching your criteria.
                   </TableCell>
                 </TableRow>
@@ -274,7 +292,7 @@ export default function AdminUsersPage() {
                     </TableCell>
 
                     {/* Change Status (ACTIVE / BLOCKED) */}
-                    <TableCell className="text-right">
+                    <TableCell className="text-center">
                       <Select
                         value={user.status}
                         onValueChange={(newStatus) => {
@@ -284,7 +302,7 @@ export default function AdminUsersPage() {
                         }}
                         disabled={isUpdatingStatus}
                       >
-                        <SelectTrigger className="w-[120px] h-8 text-xs ml-auto">
+                        <SelectTrigger className="w-[120px] h-8 text-xs mx-auto">
                           <SelectValue placeholder="Status" />
                         </SelectTrigger>
                         <SelectContent>
@@ -292,6 +310,20 @@ export default function AdminUsersPage() {
                           <SelectItem value="BLOCKED">BLOCKED</SelectItem>
                         </SelectContent>
                       </Select>
+                    </TableCell>
+
+                    {/* Action: Delete Button */}
+                    <TableCell className="text-right">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="text-rose-600 hover:text-rose-700 hover:bg-rose-50 h-8 px-2"
+                        onClick={() => handleDeleteUser(user.id, user.name)}
+                        disabled={isDeleting}
+                      >
+                        <Trash2 className="size-4 mr-1" />
+                        Delete
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))

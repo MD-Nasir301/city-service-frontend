@@ -52,3 +52,14 @@ export const updateUserStatus = async ({
     }
   );
 };
+
+
+// Delete User 
+export const deleteUserStatus = async (userId: string) => {
+  return await apiClient<{ success: boolean; message: string }>(
+    `/admin/delete-user/${userId}`,
+    {
+      method: "PATCH", 
+    }
+  );
+};

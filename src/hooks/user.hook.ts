@@ -1,4 +1,4 @@
-import { getAllUsers, updateUserRole, updateUserStatus } from "@/api/user.api";
+import { deleteUser, deleteUserStatus, getAllUsers, updateUserRole, updateUserStatus } from "@/api/user.api";
 import { IUserQueryParams } from "@/types/user.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -29,6 +29,18 @@ export const useUpdateUserStatus = () => {
 
   return useMutation({
     mutationFn: updateUserStatus,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+  });
+};
+
+// Soft Delete Hook
+export const useDeleteUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (userId: string) => deleteUserStatus(userId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
     },
