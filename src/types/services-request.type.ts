@@ -1,6 +1,4 @@
-
-import { CreateServiceRequestInput } from "@/validation/service.validation";
-import { UpdateServiceRequestInput } from "@/validation/service.validation";
+import { CreateServiceRequestInput, UpdateServiceRequestInput } from "@/validation/service.validation";
 
 export type RequestStatus =
   | "PENDING"
@@ -41,53 +39,40 @@ export interface IServiceRequestUI {
     id: string;
     name: string;
     type: CategoryType;
+    description?: string | null;
+    isPaid?: boolean;
   } | null;
 
   citizen?: {
     id: string;
     name: string;
     email: string;
+    phoneNumber?: string | null;
     imageUrl?: string | null;
   } | null;
 
   assignedStaff?: {
     id: string;
-    name: string;
+    name?: string;
+    email?: string;
+    user?: {
+      name: string;
+      email: string;
+    };
   } | null;
 
   comments?: Array<{
     id: string;
     text: string;
+    createdAt?: string;
   }>;
-}
 
-export interface ServiceRequestQueryParams {
-  search?: string;
-  status?: RequestStatus;
-  priority?: Priority;
-  type?: CategoryType;
-  categoryId?: string;
-  page?: string | number;
-  limit?: string | number;
-  sortBy?: string;
-  sortOrder?: "asc" | "desc";
-}
-
-export type ICreateServiceRequestPayload = CreateServiceRequestInput;
-export type IUpdateServiceRequestPayload = UpdateServiceRequestInput;
-
-export interface IServiceRequestMeta {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
-}
-
-export interface IGetMyRequestsApiResponse {
-  success: boolean;
-  message: string;
-  data: IServiceRequestUI[];
-  meta?: IServiceRequestMeta;
+  payment?: {
+    id: string;
+    transactionId?: string;
+    amount: number;
+    status: string;
+  } | null;
 }
 
 export interface IGetSingleRequestApiResponse {

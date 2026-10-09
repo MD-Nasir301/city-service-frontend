@@ -20,10 +20,13 @@ import { CheckCircle2, XCircle, PlayCircle, CheckCheck } from "lucide-react";
 import AuthLoading from "@/components/auth/auth-loading";
 import { toast } from "sonner";
 import { RequestStatus } from "@/types/services-request.type";
+import { useRouter } from "next/navigation";
 
 export default function StaffAssignedRequestsPage() {
   const { data: requestsData, isLoading } = useGetStaffAssignedRequests();
-  const { mutate: updateStatus, isPending: isUpdating } = useUpdateStaffRequestStatus();
+  const { mutate: updateStatus, isPending: isUpdating } =
+    useUpdateStaffRequestStatus();
+  const router = useRouter();
 
   if (isLoading) {
     return <AuthLoading label="Loading Assigned Requests..." />;
@@ -41,7 +44,7 @@ export default function StaffAssignedRequestsPage() {
         onError: (err: any) => {
           toast.error(err?.message || "Failed to update status.");
         },
-      }
+      },
     );
   };
 
@@ -72,33 +75,40 @@ export default function StaffAssignedRequestsPage() {
             <TableBody>
               {requests.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8 text-slate-500">
+                  <TableCell
+                    colSpan={6}
+                    className="text-center py-8 text-slate-500"
+                  >
                     No service requests assigned to you yet.
                   </TableCell>
                 </TableRow>
               ) : (
                 requests.map((item: any) => {
-                  // সার্ভিসটি পেইড নাকি ফ্রি চেক
                   const isCategoryPaid =
                     item.category?.isPaid ??
-                    (item.category?.type === "PAID" || (item.totalAmount && item.totalAmount > 0));
+                    (item.category?.type === "PAID" ||
+                      (item.totalAmount && item.totalAmount > 0));
 
-                  // পেমেন্ট ফিল্ড চেক (item.isPaid দিয়ে বোঝাচ্ছে টাকা পরিশোধ করা হয়েছে কি না)
                   const isPaymentDone = item.isPaid;
 
                   return (
-                    <TableRow key={item.id}>
-                      <TableCell className="font-semibold text-slate-800">
+                    <TableRow
+                      key={item.id}
+                      
+                    >
+                      <TableCell onClick={() => router.push(`/requests/${item.id}`)} className="hover:text-blue-500 cursor-pointer font-semibold text-slate-800">
                         {item.title}
                       </TableCell>
-                      
+
                       <TableCell className="text-xs text-slate-600">
                         {item.citizen?.name || item.user?.name || "N/A"}
                       </TableCell>
 
                       {/* Service Type */}
                       <TableCell>
-                        <Badge variant={isCategoryPaid ? "default" : "secondary"}>
+                        <Badge
+                          variant={isCategoryPaid ? "default" : "secondary"}
+                        >
                           {isCategoryPaid
                             ? `Paid (৳${item.totalAmount || item.amount || 0})`
                             : "Free Service"}
@@ -113,7 +123,10 @@ export default function StaffAssignedRequestsPage() {
                               Paid (${item.totalAmount || item.amount || 0})
                             </Badge>
                           ) : (
-                            <Badge variant="outline" className="bg-amber-50 text-amber-600 border-amber-200">
+                            <Badge
+                              variant="outline"
+                              className="bg-amber-50 text-amber-600 border-amber-200"
+                            >
                               Unpaid
                             </Badge>
                           )
@@ -139,7 +152,9 @@ export default function StaffAssignedRequestsPage() {
                             <Button
                               size="sm"
                               className="bg-emerald-600 hover:bg-emerald-700 h-8 text-xs"
-                              onClick={() => handleStatusUpdate(item.id, "ACCEPTED")}
+                              onClick={() =>
+                                handleStatusUpdate(item.id, "ACCEPTED")
+                              }
                               disabled={isUpdating}
                             >
                               <CheckCircle2 className="size-3.5 mr-1" />
@@ -149,7 +164,9 @@ export default function StaffAssignedRequestsPage() {
                               size="sm"
                               variant="destructive"
                               className="h-8 text-xs"
-                              onClick={() => handleStatusUpdate(item.id, "REJECTED")}
+                              onClick={() =>
+                                handleStatusUpdate(item.id, "REJECTED")
+                              }
                               disabled={isUpdating}
                             >
                               <XCircle className="size-3.5 mr-1" />
@@ -164,8 +181,12 @@ export default function StaffAssignedRequestsPage() {
                             <Button
                               size="sm"
                               className="bg-indigo-600 hover:bg-indigo-700 h-8 text-xs"
-                              onClick={() => handleStatusUpdate(item.id, "IN_PROGRESS")}
-                              disabled={isUpdating || (isCategoryPaid && !isPaymentDone)}
+                              onClick={() =>
+                                handleStatusUpdate(item.id, "IN_PROGRESS")
+                              }
+                              disabled={
+                                isUpdating || (isCategoryPaid && !isPaymentDone)
+                              }
                             >
                               <PlayCircle className="size-3.5 mr-1" />
                               Start Work
@@ -183,7 +204,9 @@ export default function StaffAssignedRequestsPage() {
                           <Button
                             size="sm"
                             className="bg-blue-600 hover:bg-blue-700 h-8 text-xs ml-auto"
-                            onClick={() => handleStatusUpdate(item.id, "RESOLVED")}
+                            onClick={() =>
+                              handleStatusUpdate(item.id, "RESOLVED")
+                            }
                             disabled={isUpdating}
                           >
                             <CheckCheck className="size-3.5 mr-1" />
@@ -192,7 +215,9 @@ export default function StaffAssignedRequestsPage() {
                         )}
 
                         {/* Completed / Cancelled / Rejected */}
-                        {["RESOLVED", "REJECTED", "CANCELLED"].includes(item.status) && (
+                        {["RESOLVED", "REJECTED", "CANCELLED"].includes(
+                          item.status,
+                        ) && (
                           <span className="text-xs text-slate-400 font-medium">
                             No Pending Action
                           </span>

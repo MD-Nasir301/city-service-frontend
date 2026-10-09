@@ -116,7 +116,7 @@ export function ServiceRequestsContent() {
                     <ComplaintCard
                       key={item.id}
                       complaint={item}
-                      onClick={() => router.push(`/public-requests/${item.id}`)}
+                      onClick={() => router.push(`/requests/${item.id}`)}
                     />
                   ))}
                 </div>

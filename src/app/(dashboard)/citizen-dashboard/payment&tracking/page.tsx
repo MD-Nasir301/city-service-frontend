@@ -24,9 +24,11 @@ import AuthLoading from "@/components/auth/auth-loading";
 import { toast } from "sonner";
 import { useGetMyRequests } from "@/hooks/service-request.hook";
 import { useCreateCheckoutSession } from "@/hooks/payment.hook";
+import { useRouter } from "next/navigation";
 
 export default function CitizenMyRequestsPage() {
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
+  const router = useRouter();
 
   const { data: requestsData, isLoading } = useGetMyRequests();
   const { mutate: initiateStripePayment, isPending: isPaying } =
@@ -76,7 +78,8 @@ export default function CitizenMyRequestsPage() {
             My Service Requests
           </h1>
           <p className="text-sm text-slate-500">
-            Track request status and complete Stripe payment for accepted requests.
+            Track request status and complete Stripe payment for accepted
+            requests.
           </p>
         </div>
 
@@ -146,7 +149,10 @@ export default function CitizenMyRequestsPage() {
 
                   return (
                     <TableRow key={item.id}>
-                      <TableCell className="font-semibold text-slate-800">
+                      <TableCell
+                        onClick={() => router.push(`/requests/${item.id}`)}
+                        className="font-semibold text-slate-800 hover:text-blue-500 cursor-pointer"
+                      >
                         {item.title}
                       </TableCell>
 
@@ -182,7 +188,8 @@ export default function CitizenMyRequestsPage() {
                               </Badge>
                               {isAwaitingStaffWork && (
                                 <span className="text-[11px] text-amber-600 flex items-center gap-1 font-medium">
-                                  <Clock className="size-3" /> Waiting for staff to start work
+                                  <Clock className="size-3" /> Waiting for staff
+                                  to start work
                                 </span>
                               )}
                             </div>
@@ -198,7 +205,8 @@ export default function CitizenMyRequestsPage() {
                             </Button>
                           ) : item.status === "ASSIGNED" ? (
                             <span className="text-xs text-amber-600 flex items-center justify-end gap-1 font-medium">
-                              <Clock className="size-3" /> Waiting for Staff Acceptance
+                              <Clock className="size-3" /> Waiting for Staff
+                              Acceptance
                             </span>
                           ) : (
                             <span className="text-xs text-slate-400">N/A</span>

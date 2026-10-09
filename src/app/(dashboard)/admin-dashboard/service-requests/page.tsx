@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   useGetAllServiceRequests,
   useUpdateServiceRequestStatus,
@@ -42,43 +43,64 @@ const getStatusBadge = (status: string) => {
   switch (status) {
     case "PENDING":
       return (
-        <Badge variant="outline" className="bg-amber-50 text-amber-600 border-amber-200">
+        <Badge
+          variant="outline"
+          className="bg-amber-50 text-amber-600 border-amber-200"
+        >
           Pending
         </Badge>
       );
     case "ASSIGNED":
       return (
-        <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
+        <Badge
+          variant="outline"
+          className="bg-blue-50 text-blue-600 border-blue-200"
+        >
           Assigned
         </Badge>
       );
     case "ACCEPTED":
       return (
-        <Badge variant="outline" className="bg-indigo-50 text-indigo-600 border-indigo-200">
+        <Badge
+          variant="outline"
+          className="bg-indigo-50 text-indigo-600 border-indigo-200"
+        >
           Accepted
         </Badge>
       );
     case "IN_PROGRESS":
       return (
-        <Badge variant="outline" className="bg-purple-50 text-purple-600 border-purple-200">
+        <Badge
+          variant="outline"
+          className="bg-purple-50 text-purple-600 border-purple-200"
+        >
           In Progress
         </Badge>
       );
     case "RESOLVED":
       return (
-        <Badge variant="outline" className="bg-emerald-50 text-emerald-600 border-emerald-200">
+        <Badge
+          variant="outline"
+          className="bg-emerald-50 text-emerald-600 border-emerald-200"
+        >
           Resolved
         </Badge>
       );
     case "CANCELLED":
       return (
-        <Badge variant="outline" className="bg-slate-100 text-slate-600 border-slate-200">
+        <Badge
+          variant="outline"
+          className="bg-slate-100 text-slate-600 border-slate-200"
+        >
           Cancelled
         </Badge>
       );
     case "REJECTED":
       return (
-        <Badge variant="outline" className="bg-rose-50 text-rose-600 border-rose-200">
+        <Badge
+          variant="outline"
+          className="bg-rose-50 text-rose-600 border-rose-200"
+        >
           Rejected
         </Badge>
       );
@@ -88,7 +110,10 @@ const getStatusBadge = (status: string) => {
 };
 
 export default function AdminServiceRequestsPage() {
-  const [selectedStatusFilter, setSelectedStatusFilter] = useState<RequestStatus | "ALL">("ALL");
+  const router = useRouter();
+  const [selectedStatusFilter, setSelectedStatusFilter] = useState<
+    RequestStatus | "ALL"
+  >("ALL");
   const [selectedRequest, setSelectedRequest] = useState<any | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
 
@@ -97,7 +122,10 @@ export default function AdminServiceRequestsPage() {
     isLoading,
     refetch,
   } = useGetAllServiceRequests({
-    status: selectedStatusFilter === "ALL" ? undefined : (selectedStatusFilter as RequestStatus),
+    status:
+      selectedStatusFilter === "ALL"
+        ? undefined
+        : (selectedStatusFilter as RequestStatus),
   });
 
   const { data: staffData } = useGetAvailableStaffs();
@@ -144,7 +172,7 @@ export default function AdminServiceRequestsPage() {
         onError: (err: any) => {
           toast.error(err?.message || "Failed to assign staff.");
         },
-      }
+      },
     );
   };
 
@@ -161,7 +189,7 @@ export default function AdminServiceRequestsPage() {
         onError: (err: any) => {
           toast.error(err?.message || "Failed to update status.");
         },
-      }
+      },
     );
   };
 
@@ -180,10 +208,14 @@ export default function AdminServiceRequestsPage() {
 
         {/* Filter Dropdown */}
         <div className="flex items-center gap-2">
-          <span className="text-sm text-slate-600 font-medium">Filter Status:</span>
+          <span className="text-sm text-slate-600 font-medium">
+            Filter Status:
+          </span>
           <Select
             value={selectedStatusFilter}
-            onValueChange={(val) => setSelectedStatusFilter(val as RequestStatus | "ALL")}
+            onValueChange={(val) =>
+              setSelectedStatusFilter(val as RequestStatus | "ALL")
+            }
           >
             <SelectTrigger className="w-[160px]">
               <SelectValue placeholder="All Status" />
@@ -220,7 +252,10 @@ export default function AdminServiceRequestsPage() {
             <TableBody>
               {requests.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-8 text-slate-500">
+                  <TableCell
+                    colSpan={7}
+                    className="text-center py-8 text-slate-500"
+                  >
                     No service requests found.
                   </TableCell>
                 </TableRow>
@@ -228,16 +263,25 @@ export default function AdminServiceRequestsPage() {
                 requests.map((req: any) => {
                   const isCategoryPaid =
                     req.category?.isPaid ??
-                    (req.category?.type === "PAID" || (req.totalAmount && req.totalAmount > 0));
+                    (req.category?.type === "PAID" ||
+                      (req.totalAmount && req.totalAmount > 0));
 
-                  // কাজ শেষ বা বন্ধ হয়ে গেছে কিনা চেক (RESOLVED, REJECTED, CANCELLED)
-                  const isClosedStatus = ["RESOLVED", "REJECTED", "CANCELLED"].includes(req.status);
+                  const isClosedStatus = [
+                    "RESOLVED",
+                    "REJECTED",
+                    "CANCELLED",
+                  ].includes(req.status);
 
                   return (
                     <TableRow key={req.id}>
-                      {/* Title & Category */}
-                      <TableCell>
-                        <div className="font-semibold text-slate-800">{req.title}</div>
+                      {/* Title & Category Column (Clickable) */}
+                      <TableCell
+                        className="cursor-pointer hover:bg-slate-100/80 transition-colors group"
+                        onClick={() => router.push(`/requests/${req.id}`)}
+                      >
+                        <div className="font-semibold text-slate-800 group-hover:text-indigo-600 transition-colors">
+                          {req.title}
+                        </div>
                         <div className="text-xs text-slate-500">
                           {req.category?.name || "General Service"}
                         </div>
@@ -255,7 +299,9 @@ export default function AdminServiceRequestsPage() {
 
                       {/* Service Type (Paid / Free) */}
                       <TableCell>
-                        <Badge variant={isCategoryPaid ? "default" : "secondary"}>
+                        <Badge
+                          variant={isCategoryPaid ? "default" : "secondary"}
+                        >
                           {isCategoryPaid
                             ? `Paid (৳${req.totalAmount || req.amount || 0})`
                             : "Free Service"}
@@ -270,7 +316,10 @@ export default function AdminServiceRequestsPage() {
                               Paid
                             </Badge>
                           ) : (
-                            <Badge variant="outline" className="bg-amber-50 text-amber-600 border-amber-200">
+                            <Badge
+                              variant="outline"
+                              className="bg-amber-50 text-amber-600 border-amber-200"
+                            >
                               Unpaid
                             </Badge>
                           )
@@ -285,16 +334,16 @@ export default function AdminServiceRequestsPage() {
                       {/* Assign Staff Dropdown */}
                       <TableCell>
                         {isClosedStatus ? (
-                          /* যদি রিকোয়েস্টটি Resolved/Cancelled/Rejected হয় */
                           <span className="text-xs text-slate-500 flex items-center gap-1 font-medium bg-slate-100 px-2 py-1 rounded w-fit">
                             <Lock className="size-3 text-slate-400" />
                             {req.status === "RESOLVED" ? "Completed" : "Closed"}
                           </span>
                         ) : (
-                          /* চলমান রিকোয়েস্টের জন্য ড্রপডাউন */
                           <Select
                             value={req.assignedStaffId || ""}
-                            onValueChange={(staffId) => handleAssignStaff(req.id, staffId)}
+                            onValueChange={(staffId) =>
+                              handleAssignStaff(req.id, staffId)
+                            }
                             disabled={isAssigning}
                           >
                             <SelectTrigger className="w-[180px] h-9 text-xs">
@@ -322,7 +371,7 @@ export default function AdminServiceRequestsPage() {
                                         </SelectItem>
                                       ))}
                                     </SelectGroup>
-                                  )
+                                  ),
                                 )
                               )}
                             </SelectContent>
@@ -355,113 +404,135 @@ export default function AdminServiceRequestsPage() {
 
       {/* Detailed Modal / Dialog */}
       <Dialog open={isDetailOpen} onOpenChange={setIsDetailOpen}>
-        {selectedRequest && (() => {
-          const isCategoryPaid =
-            selectedRequest.category?.isPaid ??
-            (selectedRequest.category?.type === "PAID" ||
-              (selectedRequest.totalAmount && selectedRequest.totalAmount > 0));
+        {selectedRequest &&
+          (() => {
+            const isCategoryPaid =
+              selectedRequest.category?.isPaid ??
+              (selectedRequest.category?.type === "PAID" ||
+                (selectedRequest.totalAmount &&
+                  selectedRequest.totalAmount > 0));
 
-          return (
-            <DialogContent className="max-w-2xl">
-              <DialogHeader>
-                <DialogTitle className="flex justify-between items-center pr-6">
-                  <span>Request Details</span>
-                  {getStatusBadge(selectedRequest.status)}
-                </DialogTitle>
-              </DialogHeader>
+            return (
+              <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                  <DialogTitle className="flex justify-between items-center pr-6">
+                    <span>Request Details</span>
+                    {getStatusBadge(selectedRequest.status)}
+                  </DialogTitle>
+                </DialogHeader>
 
-              <div className="space-y-4 text-sm py-2">
-                {/* Service Info */}
-                <div className="bg-slate-50 p-4 rounded-lg border space-y-2">
-                  <h3 className="font-bold text-base text-slate-800">
-                    {selectedRequest.title}
-                  </h3>
-                  <p className="text-slate-600">{selectedRequest.description}</p>
-                  <div className="flex flex-wrap gap-4 text-xs text-slate-500 pt-2 border-t">
-                    <span>
-                      Priority: <strong>{selectedRequest.priority || "NORMAL"}</strong>
-                    </span>
-                    <span>
-                      Service Type:{" "}
-                      <strong>
-                        {isCategoryPaid ? "Paid Service" : "Free Service"}
-                      </strong>
-                    </span>
-                    {isCategoryPaid && (
-                      <>
-                        <span>
-                          Total Amount:{" "}
-                          <strong>৳{selectedRequest.totalAmount || 0}</strong>
-                        </span>
-                        <span>
-                          Payment Status:{" "}
-                          <strong className={selectedRequest.isPaid ? "text-emerald-600" : "text-amber-600"}>
-                            {selectedRequest.isPaid ? "PAID" : "UNPAID"}
-                          </strong>
-                        </span>
-                      </>
-                    )}
+                <div className="space-y-4 text-sm py-2">
+                  {/* Service Info */}
+                  <div className="bg-slate-50 p-4 rounded-lg border space-y-2">
+                    <h3 className="font-bold text-base text-slate-800">
+                      {selectedRequest.title}
+                    </h3>
+                    <p className="text-slate-600">
+                      {selectedRequest.description}
+                    </p>
+                    <div className="flex flex-wrap gap-4 text-xs text-slate-500 pt-2 border-t">
+                      <span>
+                        Priority:{" "}
+                        <strong>{selectedRequest.priority || "NORMAL"}</strong>
+                      </span>
+                      <span>
+                        Service Type:{" "}
+                        <strong>
+                          {isCategoryPaid ? "Paid Service" : "Free Service"}
+                        </strong>
+                      </span>
+                      {isCategoryPaid && (
+                        <>
+                          <span>
+                            Total Amount:{" "}
+                            <strong>৳{selectedRequest.totalAmount || 0}</strong>
+                          </span>
+                          <span>
+                            Payment Status:{" "}
+                            <strong
+                              className={
+                                selectedRequest.isPaid
+                                  ? "text-emerald-600"
+                                  : "text-amber-600"
+                              }
+                            >
+                              {selectedRequest.isPaid ? "PAID" : "UNPAID"}
+                            </strong>
+                          </span>
+                        </>
+                      )}
+                    </div>
+                    <div className="text-xs text-slate-500">
+                      Address:{" "}
+                      <strong>{selectedRequest.address || "N/A"}</strong>
+                    </div>
                   </div>
-                  <div className="text-xs text-slate-500">
-                    Address: <strong>{selectedRequest.address || "N/A"}</strong>
+
+                  {/* Citizen Details */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-3 border rounded-lg">
+                      <span className="text-xs text-slate-500 block">
+                        Requested By
+                      </span>
+                      <span className="font-semibold">
+                        {selectedRequest.citizen?.name ||
+                          selectedRequest.user?.name ||
+                          "N/A"}
+                      </span>
+                      <span className="text-xs block text-slate-500">
+                        {selectedRequest.citizen?.email ||
+                          selectedRequest.user?.email ||
+                          "N/A"}
+                      </span>
+                    </div>
+
+                    <div className="p-3 border rounded-lg">
+                      <span className="text-xs text-slate-500 block">
+                        Assigned Staff ID
+                      </span>
+                      <span className="font-semibold text-indigo-600">
+                        {selectedRequest.assignedStaffId || "Unassigned"}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Change Status Dropdown (Admin Override) */}
+                  <div className="border-t pt-4">
+                    <label className="text-xs font-semibold text-slate-700 block mb-2">
+                      Admin Status Override:
+                    </label>
+                    <div className="flex items-center gap-3">
+                      <Select
+                        value={selectedRequest.status}
+                        onValueChange={(val) =>
+                          handleStatusChange(selectedRequest.id, val)
+                        }
+                        disabled={isUpdatingStatus}
+                      >
+                        <SelectTrigger className="w-[200px]">
+                          <SelectValue placeholder="Select Status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="PENDING">PENDING</SelectItem>
+                          <SelectItem value="ASSIGNED">ASSIGNED</SelectItem>
+                          <SelectItem value="ACCEPTED">ACCEPTED</SelectItem>
+                          <SelectItem value="IN_PROGRESS">
+                            IN_PROGRESS
+                          </SelectItem>
+                          <SelectItem value="RESOLVED">RESOLVED</SelectItem>
+                          <SelectItem value="REJECTED">REJECTED</SelectItem>
+                          <SelectItem value="CANCELLED">CANCELLED</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <span className="text-xs text-slate-500">
+                        (Admin has full power to force status change)
+                      </span>
+                    </div>
                   </div>
                 </div>
-
-                {/* Citizen Details */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="p-3 border rounded-lg">
-                    <span className="text-xs text-slate-500 block">Requested By</span>
-                    <span className="font-semibold">
-                      {selectedRequest.citizen?.name || selectedRequest.user?.name || "N/A"}
-                    </span>
-                    <span className="text-xs block text-slate-500">
-                      {selectedRequest.citizen?.email || selectedRequest.user?.email || "N/A"}
-                    </span>
-                  </div>
-
-                  <div className="p-3 border rounded-lg">
-                    <span className="text-xs text-slate-500 block">Assigned Staff ID</span>
-                    <span className="font-semibold text-indigo-600">
-                      {selectedRequest.assignedStaffId || "Unassigned"}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Change Status Dropdown (Admin Override) */}
-                <div className="border-t pt-4">
-                  <label className="text-xs font-semibold text-slate-700 block mb-2">
-                    Admin Status Override:
-                  </label>
-                  <div className="flex items-center gap-3">
-                    <Select
-                      value={selectedRequest.status}
-                      onValueChange={(val) =>
-                        handleStatusChange(selectedRequest.id, val)
-                      }
-                      disabled={isUpdatingStatus}
-                    >
-                      <SelectTrigger className="w-[200px]">
-                        <SelectValue placeholder="Select Status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="PENDING">PENDING</SelectItem>
-                        <SelectItem value="ASSIGNED">ASSIGNED</SelectItem>
-                        <SelectItem value="ACCEPTED">ACCEPTED</SelectItem>
-                        <SelectItem value="IN_PROGRESS">IN_PROGRESS</SelectItem>
-                        <SelectItem value="RESOLVED">RESOLVED</SelectItem>
-                        <SelectItem value="REJECTED">REJECTED</SelectItem>
-                        <SelectItem value="CANCELLED">CANCELLED</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <span className="text-xs text-slate-500">
-                      (Admin has full power to force status change)
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </DialogContent>
-          );
-        })()}
+              </DialogContent>
+            );
+          })()}
       </Dialog>
     </div>
   );
