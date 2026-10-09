@@ -5,6 +5,8 @@ import {
   getAllServiceRequests,
   getMyRequests,
   getSingleServiceRequest,
+  getStaffAssignedRequests,
+  updateRequestStatusByStaff,
   updateServiceRequest,
   updateServiceRequestStatus,
 } from "@/api/service-request.api";
@@ -105,6 +107,26 @@ export const useUpdateServiceRequestStatus = () => {
           queryKey: ["service-request", variables.id],
         });
       }
+    },
+  });
+};
+
+export const useGetStaffAssignedRequests = () => {
+  return useQuery({
+    queryKey: ["staff-assigned-requests"],
+    queryFn: getStaffAssignedRequests,
+    staleTime: 1000 * 60 * 3,
+  });
+};
+
+export const useUpdateStaffRequestStatus = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateRequestStatusByStaff,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["staff-assigned-requests"] });
+      queryClient.invalidateQueries({ queryKey: ["service-requests"] });
     },
   });
 };

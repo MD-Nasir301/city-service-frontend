@@ -45,7 +45,6 @@ export function CreateServiceRequestForm({
   isLoadingCategories = false,
   initialData,
   isUpdateMode = false,
-  
 }: CreateServiceRequestFormProps) {
   const router = useRouter();
 
@@ -125,8 +124,13 @@ export function CreateServiceRequestForm({
       const formData = new FormData();
 
       Object.entries(value).forEach(([key, val]) => {
-        if (key !== "images" && val !== null && val !== undefined) {
-          formData.append(key, String(val));
+        if (key !== "images" && val !== null && val !== undefined && val !== "") {
+          // Date ফিল্ডগুলোকে সঠিক ISO String ফরম্যাটে কনভার্ট করা
+          if ((key === "preferredStartDate" || key === "preferredEndDate") && val) {
+            formData.append(key, new Date(val as string).toISOString());
+          } else {
+            formData.append(key, String(val));
+          }
         }
       });
 
@@ -177,7 +181,7 @@ export function CreateServiceRequestForm({
           {/* SECTION 1: CATEGORY & BASIC DETAILS */}
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-sm font-semibold text-primary uppercase tracking-wider">
-              <FileText className="size-4" /> 1. Service Category & Basic Info
+              <FileText className="size-4" /> Service Category & Basic Info
             </div>
 
             {/* Category Filter */}
@@ -226,7 +230,9 @@ export function CreateServiceRequestForm({
                       </FieldLabel>
                       <Select
                         value={field.state.value}
-                        onValueChange={(val) => field.handleChange(val as string)}
+                        onValueChange={(val) =>
+                          field.handleChange(val as string)
+                        }
                         disabled={isLoadingCategories}
                       >
                         <SelectTrigger className="h-10 text-sm rounded-lg w-full">
@@ -534,42 +540,58 @@ export function CreateServiceRequestForm({
                     <>
                       {/* Start Date */}
                       <form.Field name="preferredStartDate">
-                        {(field) => (
-                          <Field>
-                            <FieldLabel className="flex items-center gap-1.5">
-                              <Calendar className="size-3.5 text-muted-foreground" />{" "}
-                              Preferred Start Date
-                            </FieldLabel>
-                            <Input
-                              type="datetime-local"
-                              value={field.state.value || ""}
-                              onChange={(e) =>
-                                field.handleChange(e.target.value)
-                              }
-                              className="h-10 text-sm rounded-lg"
-                            />
-                          </Field>
-                        )}
+                        {(field) => {
+                          const isInvalid =
+                            field.state.meta.isTouched &&
+                            field.state.meta.errors.length > 0;
+                          return (
+                            <Field data-invalid={isInvalid}>
+                              <FieldLabel className="flex items-center gap-1.5">
+                                <Calendar className="size-3.5 text-muted-foreground" />{" "}
+                                Preferred Start Date
+                              </FieldLabel>
+                              <Input
+                                type="datetime-local"
+                                value={field.state.value || ""}
+                                onChange={(e) =>
+                                  field.handleChange(e.target.value)
+                                }
+                                className="h-10 text-sm rounded-lg"
+                              />
+                              {isInvalid && (
+                                <FieldError errors={field.state.meta.errors} />
+                              )}
+                            </Field>
+                          );
+                        }}
                       </form.Field>
 
                       {/* End Date */}
                       <form.Field name="preferredEndDate">
-                        {(field) => (
-                          <Field>
-                            <FieldLabel className="flex items-center gap-1.5">
-                              <Calendar className="size-3.5 text-muted-foreground" />{" "}
-                              Preferred End Date
-                            </FieldLabel>
-                            <Input
-                              type="datetime-local"
-                              value={field.state.value || ""}
-                              onChange={(e) =>
-                                field.handleChange(e.target.value)
-                              }
-                              className="h-10 text-sm rounded-lg"
-                            />
-                          </Field>
-                        )}
+                        {(field) => {
+                          const isInvalid =
+                            field.state.meta.isTouched &&
+                            field.state.meta.errors.length > 0;
+                          return (
+                            <Field data-invalid={isInvalid}>
+                              <FieldLabel className="flex items-center gap-1.5">
+                                <Calendar className="size-3.5 text-muted-foreground" />{" "}
+                                Preferred End Date
+                              </FieldLabel>
+                              <Input
+                                type="datetime-local"
+                                value={field.state.value || ""}
+                                onChange={(e) =>
+                                  field.handleChange(e.target.value)
+                                }
+                                className="h-10 text-sm rounded-lg"
+                              />
+                              {isInvalid && (
+                                <FieldError errors={field.state.meta.errors} />
+                              )}
+                            </Field>
+                          );
+                        }}
                       </form.Field>
                     </>
                   );

@@ -4,6 +4,8 @@ import {
   ServiceRequestQueryParams,
   IGetMyRequestsApiResponse,
   IGetSingleRequestApiResponse,
+  RequestStatus,
+  IServiceRequestUI,
 } from "@/types/services-request.type";
 
 export const getAllServiceRequests = async (
@@ -90,6 +92,36 @@ export const updateServiceRequestStatus = async ({
     {
       method: "PATCH",
       body: { status },
+    }
+  );
+};
+
+
+
+export const getStaffAssignedRequests = async () => {
+  return await apiClient<{ success: boolean; data: IServiceRequestUI[] }>(
+    `/service-request/my-assigned`, 
+    {
+      method: "GET",
+    }
+  );
+};
+
+
+export const updateRequestStatusByStaff = async ({
+  requestId,
+  status,
+  remarks,
+}: {
+  requestId: string;
+  status: RequestStatus;
+  remarks?: string;
+}) => {
+  return await apiClient<{ success: boolean; message: string; data: any }>(
+    `/service-requests/${requestId}/status`,
+    {
+      method: "PATCH",
+      body: { status, remarks },
     }
   );
 };

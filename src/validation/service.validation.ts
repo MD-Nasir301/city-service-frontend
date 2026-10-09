@@ -1,36 +1,36 @@
-import { z } from "zod";
+import z from "zod";
 
+// ১. Create Service Request Schema
 export const createServiceRequestSchema = z
   .object({
-    categoryId: z.string().min(1, "Please select a service category"),
+    categoryId: z.string().min(1, "Category ID is required"),
     title: z
       .string()
-      .min(5, "Title must be at least 5 characters")
-      .max(100, "Title cannot exceed 100 characters"),
+      .min(5, "Title must be at least 5 characters long"),
     description: z
       .string()
-      .min(
-        15,
-        "Please provide a detailed description (at least 15 characters)",
-      ),
-    address: z.string().min(5, "Address must be at least 5 characters"),
-    latitude: z.number().optional().nullable(),
-    longitude: z.number().optional().nullable(),
-    images: z.array(z.string().url("Invalid image URL")),
-    priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]),
-    quantity: z.number().min(1, "Quantity must be at least 1"),
+      .min(10, "Description must be at least 10 characters long"),
+    address: z.string().min(1, "Address is required"),
+    priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]).optional(),
+    quantity: z.number().min(1, "Quantity must be at least 1").optional(),
+    
+    // HTML datetime-local string (2026-10-09T14:22) এবং খালি স্ট্রিং পাস করানোর জন্য
     preferredStartDate: z
       .string()
-      .datetime("Invalid ISO date format")
-      .or(z.literal(""))
       .optional()
-      .nullable(),
+      .refine((val) => !val || !isNaN(Date.parse(val)), {
+        message: "Invalid date format",
+      }),
     preferredEndDate: z
       .string()
-      .datetime("Invalid ISO date format")
-      .or(z.literal(""))
       .optional()
-      .nullable(),
+      .refine((val) => !val || !isNaN(Date.parse(val)), {
+        message: "Invalid date format",
+      }),
+      
+    latitude: z.number().nullable().optional(),
+    longitude: z.number().nullable().optional(),
+    images: z.array(z.string()).optional(),
   })
   .refine(
     (data) => {
@@ -42,15 +42,17 @@ export const createServiceRequestSchema = z
       return true;
     },
     {
-      message: "End date cannot be earlier than start date",
+      message:
+        "preferredEndDate must be equal to or after preferredStartDate.",
       path: ["preferredEndDate"],
-    },
+    }
   );
 
 export type CreateServiceRequestInput = z.infer<
   typeof createServiceRequestSchema
 >;
 
+// ২. Update Service Request Schema
 export const updateServiceRequestSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters").optional(),
   description: z
@@ -63,12 +65,20 @@ export const updateServiceRequestSchema = z.object({
     .optional(),
   priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]).optional(),
   quantity: z.number().min(1).optional(),
-  preferredStartDate: z.string().nullable().optional(),
-  preferredEndDate: z.string().nullable().optional(),
+  preferredStartDate: z
+    .string()
+    .nullable()
+    .optional()
+    .refine((val) => !val || !isNaN(Date.parse(val)), {
+      message: "Invalid date format",
+    }),
+  preferredEndDate: z
+    .string()
+    .nullable()
+    .optional()
+    .refine((val) => !val || !isNaN(Date.parse(val)), {
+      message: "Invalid date format",
+    }),
   latitude: z.number().nullable().optional(),
   longitude: z.number().nullable().optional(),
 });
-
-export type UpdateServiceRequestInput = z.infer<
-  typeof updateServiceRequestSchema
->;
