@@ -118,7 +118,7 @@ export const updateRequestStatusByStaff = async ({
   remarks?: string;
 }) => {
   return await apiClient<{ success: boolean; message: string; data: any }>(
-    `/service-requests/${requestId}/status`,
+    `/service-request/${requestId}/status`,
     {
       method: "PATCH",
       body: { status, remarks },
