@@ -112,7 +112,7 @@ export function ComplaintCard({
   const user = userResponse?.data;
 
   const hasImages = complaint.images && complaint.images.length > 0;
-  const isEditable = complaint.status === "PENDING"; // শুধুমাত্র PENDING অবস্থা থাকলে Edit সম্ভব
+  const isEditable = complaint.status === "PENDING";
 
   return (
     <div

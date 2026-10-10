@@ -12,7 +12,6 @@ import {
   ArrowRight,
   CreditCard,
 } from "lucide-react";
-import AuthLoading from "@/components/auth/auth-loading";
 import CitizenRequestsTable from "@/components/modules/citizen/citizen-requests-table";
 import { OverviewSkeleton } from "@/components/dashboard/overview-skeleton";
 
@@ -37,7 +36,7 @@ export default function CitizenOverviewPage() {
     (r: any) => r.status === "RESOLVED"
   ).length;
 
-  const recentRequests = requests.slice(0, 5); // সাম্প্রতিক ৫টি
+  const recentRequests = requests.slice(0, 5); 
 
   return (
     <div className="space-y-6">

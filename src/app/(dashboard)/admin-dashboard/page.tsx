@@ -12,7 +12,6 @@ import {
   PieChart as PieIcon,
   BarChart3,
 } from "lucide-react";
-import AuthLoading from "@/components/auth/auth-loading";
 import {
   PieChart,
   Pie,
@@ -204,7 +203,7 @@ export default function AdminOverviewPage() {
         </Card>
       </div>
 
-      {/* Detailed Users & Breakdown Section (আপনার আগের অরিজিনাল সেকশন) */}
+      {/* Detailed Users & Breakdown Section */}
       <div className="grid gap-4 md:grid-cols-2">
         {/* User Breakdown */}
         <Card>

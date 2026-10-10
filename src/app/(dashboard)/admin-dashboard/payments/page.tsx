@@ -1,4 +1,4 @@
-import { HardHat } from "lucide-react"; // lucide-react আইকন ব্যবহার করলে
+import { HardHat } from "lucide-react"; 
 
 export default function UnderConstructionPage() {
   return (

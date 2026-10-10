@@ -222,7 +222,7 @@ export default function AdminServiceRequestsPage() {
             value={selectedStatusFilter}
             onValueChange={(val) => {
               setSelectedStatusFilter(val as RequestStatus | "ALL");
-              setPage(1); // Filter পরিবর্তন করলে প্রথম পেজে ফেরত যাবে
+              setPage(1); 
             }}
           >
             <SelectTrigger className="w-[160px]">
