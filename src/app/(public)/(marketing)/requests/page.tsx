@@ -22,6 +22,7 @@ import {
   ShieldCheck,
   CheckCircle2,
 } from "lucide-react";
+import { DetailPageSkeleton } from "@/components/skeleton/details-page-skeleton";
 
 // Status Badge Helper
 const getStatusBadge = (status: string) => {
@@ -107,7 +108,7 @@ export default function ServiceRequestDetailsPage() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   if (isLoading) {
-    return <AuthLoading label="Loading Request Details..." />;
+    return <DetailPageSkeleton />;
   }
 
   if (error || !requestResponse?.data) {
@@ -289,7 +290,8 @@ export default function ServiceRequestDetailsPage() {
             {/* Schedule Dates */}
             <div className="p-4 border rounded-xl space-y-2 bg-white shadow-sm">
               <span className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-                <Calendar className="size-3.5 text-emerald-500" /> Service Timeline
+                <Calendar className="size-3.5 text-emerald-500" /> Service
+                Timeline
               </span>
               <div className="text-xs text-slate-600 space-y-1.5">
                 <div className="flex justify-between">
@@ -314,7 +316,8 @@ export default function ServiceRequestDetailsPage() {
             {/* Payment Summary */}
             <div className="p-4 border rounded-xl space-y-2 bg-white shadow-sm">
               <span className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-                <CreditCard className="size-3.5 text-amber-500" /> Payment & Charges
+                <CreditCard className="size-3.5 text-amber-500" /> Payment &
+                Charges
               </span>
               {isCategoryPaid ? (
                 <div className="space-y-1.5 text-xs">
