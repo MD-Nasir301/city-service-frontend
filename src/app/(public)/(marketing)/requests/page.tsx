@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { useGetSingleServiceRequest } from "@/hooks/service-request.hook";
-import AuthLoading from "@/components/auth/auth-loading";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
