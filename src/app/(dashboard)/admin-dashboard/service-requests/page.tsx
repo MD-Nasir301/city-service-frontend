@@ -32,7 +32,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Eye, Lock } from "lucide-react";
+import { Eye, Lock, ChevronLeft, ChevronRight } from "lucide-react";
 import AuthLoading from "@/components/auth/auth-loading";
 import { toast } from "sonner";
 import { useGetAvailableStaffs, useAssignStaff } from "@/hooks/staff.hook";
@@ -117,11 +117,17 @@ export default function AdminServiceRequestsPage() {
   const [selectedRequest, setSelectedRequest] = useState<any | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
 
+  // Pagination States
+  const [page, setPage] = useState<number>(1);
+  const [limit, setLimit] = useState<number>(10);
+
   const {
     data: requestsData,
     isLoading,
     refetch,
   } = useGetAllServiceRequests({
+    page,
+    limit,
     status:
       selectedStatusFilter === "ALL"
         ? undefined
@@ -139,16 +145,16 @@ export default function AdminServiceRequestsPage() {
     return <AuthLoading label="Loading Service Requests..." />;
   }
 
-  const rawRequests = requestsData?.data || [];
+  const requests = requestsData?.data || [];
+  const meta = requestsData?.meta || {
+    page: 1,
+    limit: 10,
+    total: 0,
+    totalPages: 1,
+  };
   const staffList = staffData?.data || [];
 
-  // Client-side backup filtering
-  const requests =
-    selectedStatusFilter === "ALL"
-      ? rawRequests
-      : rawRequests.filter((req: any) => req.status === selectedStatusFilter);
-
-  // Department string handle
+  // Department grouping
   const groupedStaff = staffList.reduce((acc: any, staff: any) => {
     const deptName =
       typeof staff.department === "string"
@@ -172,7 +178,7 @@ export default function AdminServiceRequestsPage() {
         onError: (err: any) => {
           toast.error(err?.message || "Failed to assign staff.");
         },
-      },
+      }
     );
   };
 
@@ -189,7 +195,7 @@ export default function AdminServiceRequestsPage() {
         onError: (err: any) => {
           toast.error(err?.message || "Failed to update status.");
         },
-      },
+      }
     );
   };
 
@@ -213,9 +219,10 @@ export default function AdminServiceRequestsPage() {
           </span>
           <Select
             value={selectedStatusFilter}
-            onValueChange={(val) =>
-              setSelectedStatusFilter(val as RequestStatus | "ALL")
-            }
+            onValueChange={(val) => {
+              setSelectedStatusFilter(val as RequestStatus | "ALL");
+              setPage(1); // Filter পরিবর্তন করলে প্রথম পেজে ফেরত যাবে
+            }}
           >
             <SelectTrigger className="w-[160px]">
               <SelectValue placeholder="All Status" />
@@ -371,7 +378,7 @@ export default function AdminServiceRequestsPage() {
                                         </SelectItem>
                                       ))}
                                     </SelectGroup>
-                                  ),
+                                  )
                                 )
                               )}
                             </SelectContent>
@@ -399,6 +406,63 @@ export default function AdminServiceRequestsPage() {
               )}
             </TableBody>
           </Table>
+
+          {/* Pagination Controls */}
+          {meta.total > 0 && (
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 border-t bg-slate-50/50">
+              <div className="flex items-center gap-2 text-xs text-slate-600">
+                <span>Rows per page:</span>
+                <Select
+                  value={limit.toString()}
+                  onValueChange={(val) => {
+                    setLimit(Number(val));
+                    setPage(1);
+                  }}
+                >
+                  <SelectTrigger className="w-[70px] h-8 text-xs bg-white">
+                    <SelectValue placeholder="10" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="5">5</SelectItem>
+                    <SelectItem value="10">10</SelectItem>
+                    <SelectItem value="20">20</SelectItem>
+                    <SelectItem value="50">50</SelectItem>
+                  </SelectContent>
+                </Select>
+                <span className="ml-2 font-medium">
+                  Showing {(meta.page - 1) * meta.limit + 1} to{" "}
+                  {Math.min(meta.page * meta.limit, meta.total)} of {meta.total}{" "}
+                  requests
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 text-xs bg-white"
+                  onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                  disabled={meta.page <= 1}
+                >
+                  <ChevronLeft className="size-3.5 mr-1" /> Previous
+                </Button>
+                <span className="text-xs text-slate-600 font-medium px-2">
+                  Page {meta.page} of {meta.totalPages}
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 text-xs bg-white"
+                  onClick={() =>
+                    setPage((prev) => Math.min(prev + 1, meta.totalPages))
+                  }
+                  disabled={meta.page >= meta.totalPages}
+                >
+                  Next <ChevronRight className="size-3.5 ml-1" />
+                </Button>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -445,7 +509,9 @@ export default function AdminServiceRequestsPage() {
                         <>
                           <span>
                             Total Amount:{" "}
-                            <strong>৳{selectedRequest.totalAmount || 0}</strong>
+                            <strong>
+                              ৳{selectedRequest.totalAmount || 0}
+                            </strong>
                           </span>
                           <span>
                             Payment Status:{" "}

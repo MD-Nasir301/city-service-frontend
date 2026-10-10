@@ -27,7 +27,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Search, Trash2 } from "lucide-react";
+import { Search, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import AuthLoading from "@/components/auth/auth-loading";
 import { toast } from "sonner";
 
@@ -82,9 +82,15 @@ export default function AdminUsersPage() {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedRoleFilter, setSelectedRoleFilter] = useState<string>("ALL");
   const [selectedStatusFilter, setSelectedStatusFilter] = useState<string>("ALL");
+  
+  // Pagination States
+  const [page, setPage] = useState<number>(1);
+  const [limit, setLimit] = useState<number>(10);
 
-  // Fetch Users
-  const { data: usersData, isLoading } = useGetAllUsers({
+  // Fetch Users with Pagination & Filters
+  const { data: usersResponse, isLoading } = useGetAllUsers({
+    page,
+    limit,
     search: searchTerm || undefined,
     role: selectedRoleFilter === "ALL" ? undefined : selectedRoleFilter,
     status: selectedStatusFilter === "ALL" ? undefined : selectedStatusFilter,
@@ -99,16 +105,13 @@ export default function AdminUsersPage() {
     return <AuthLoading label="Loading Users..." />;
   }
 
-  const rawUsers = usersData?.data || [];
-
-  // Client-side backup filter
-  const users = rawUsers.filter((user) => {
-    const matchesRole =
-      selectedRoleFilter === "ALL" || user.role === selectedRoleFilter;
-    const matchesStatus =
-      selectedStatusFilter === "ALL" || user.status === selectedStatusFilter;
-    return matchesRole && matchesStatus;
-  });
+  const users = usersResponse?.data || [];
+  const meta = usersResponse?.meta || {
+    page: 1,
+    limit: 10,
+    total: 0,
+    totalPages: 1,
+  };
 
   // Change Role Handler
   const handleRoleChange = (userId: string, newRole: UserRole) => {
@@ -125,7 +128,7 @@ export default function AdminUsersPage() {
     );
   };
 
-  // Change Status Handler (ACTIVE, BLOCKED)
+  // Change Status Handler
   const handleStatusChange = (userId: string, newStatus: UserStatus) => {
     updateStatus(
       { userId, status: newStatus },
@@ -174,7 +177,10 @@ export default function AdminUsersPage() {
           <Input
             placeholder="Search by name or email..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setPage(1); // Reset to first page on search
+            }}
             className="pl-9 h-9 text-xs"
           />
         </div>
@@ -186,7 +192,10 @@ export default function AdminUsersPage() {
             <span className="text-xs text-slate-600 font-medium">Role:</span>
             <Select
               value={selectedRoleFilter}
-              onValueChange={(val) => setSelectedRoleFilter(val ?? "ALL")}
+              onValueChange={(val) => {
+                setSelectedRoleFilter(val ?? "ALL");
+                setPage(1);
+              }}
             >
               <SelectTrigger className="w-[130px] h-9 text-xs">
                 <SelectValue placeholder="All Roles" />
@@ -206,7 +215,10 @@ export default function AdminUsersPage() {
             <span className="text-xs text-slate-600 font-medium">Status:</span>
             <Select
               value={selectedStatusFilter}
-              onValueChange={(val) => setSelectedStatusFilter(val ?? "ALL")}
+              onValueChange={(val) => {
+                setSelectedStatusFilter(val ?? "ALL");
+                setPage(1);
+              }}
             >
               <SelectTrigger className="w-[130px] h-9 text-xs">
                 <SelectValue placeholder="All Status" />
@@ -245,7 +257,7 @@ export default function AdminUsersPage() {
                   </TableCell>
                 </TableRow>
               ) : (
-                users.map((user) => (
+                users.map((user: any) => (
                   <TableRow key={user.id}>
                     {/* User Info */}
                     <TableCell>
@@ -255,7 +267,7 @@ export default function AdminUsersPage() {
 
                     {/* Phone */}
                     <TableCell className="text-xs text-slate-600">
-                      {user.phoneNumber || user.phone || "N/A"}
+                      {user.phoneNumber || "N/A"}
                     </TableCell>
 
                     {/* Role Badge */}
@@ -291,7 +303,7 @@ export default function AdminUsersPage() {
                       </Select>
                     </TableCell>
 
-                    {/* Change Status (ACTIVE / BLOCKED) */}
+                    {/* Change Status */}
                     <TableCell className="text-center">
                       <Select
                         value={user.status}
@@ -330,6 +342,60 @@ export default function AdminUsersPage() {
               )}
             </TableBody>
           </Table>
+
+          {/* Pagination Controls */}
+          {meta.total > 0 && (
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 border-t bg-slate-50/50">
+              <div className="flex items-center gap-2 text-xs text-slate-600">
+                <span>Rows per page:</span>
+                <Select
+                  value={limit.toString()}
+                  onValueChange={(val) => {
+                    setLimit(Number(val));
+                    setPage(1);
+                  }}
+                >
+                  <SelectTrigger className="w-[70px] h-8 text-xs bg-white">
+                    <SelectValue placeholder="10" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="5">5</SelectItem>
+                    <SelectItem value="10">10</SelectItem>
+                    <SelectItem value="20">20</SelectItem>
+                    <SelectItem value="50">50</SelectItem>
+                  </SelectContent>
+                </Select>
+                <span className="ml-2 font-medium">
+                  Showing {((meta.page - 1) * meta.limit) + 1} to{" "}
+                  {Math.min(meta.page * meta.limit, meta.total)} of {meta.total} users
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 text-xs bg-white"
+                  onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                  disabled={meta.page <= 1}
+                >
+                  <ChevronLeft className="size-3.5 mr-1" /> Previous
+                </Button>
+                <span className="text-xs text-slate-600 font-medium px-2">
+                  Page {meta.page} of {meta.totalPages}
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 text-xs bg-white"
+                  onClick={() => setPage((prev) => Math.min(prev + 1, meta.totalPages))}
+                  disabled={meta.page >= meta.totalPages}
+                >
+                  Next <ChevronRight className="size-3.5 ml-1" />
+                </Button>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
