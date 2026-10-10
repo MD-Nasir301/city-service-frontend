@@ -21,16 +21,20 @@ import {
   HardHat,
 } from "lucide-react";
 import { useGetCategories } from "@/hooks/category.hook";
+import { useGetMe } from "@/hooks/auth.hook";
+import { toast } from "sonner";
+import { CardSkeleton } from "@/components/ui/card-skeleton";
 
 export default function ServicesPage() {
   const router = useRouter();
   const { data: categoriesResponse, isLoading, error } = useGetCategories();
+  const { data: userResponse } = useGetMe();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState<"ALL" | "FREE" | "PAID">("ALL");
 
   if (isLoading) {
-    return <AuthLoading label="Loading Available Services..." />;
+    return <CardSkeleton />;
   }
 
   const categories = categoriesResponse?.data || [];
@@ -48,26 +52,27 @@ export default function ServicesPage() {
     return matchesSearch;
   });
 
+  // Handle Selected Category With Role-Base Route
+  const user = userResponse?.data;
+  const role = user?.role;
   const handleSelectCategory = (categoryId: string) => {
-    // Redirecting to Create Request with Pre-selected Category
-    router.push(`/citizen-dashboard/create-request?categoryId=${categoryId}`);
+    if (!role) {
+      toast("Login Required.", {
+        description: "Please login as a citizen to create request",
+      });
+    } else if (role === "CITIZEN") {
+      router.push(`/citizen-dashboard/create-request?categoryId=${categoryId}`);
+    } else if (role === "ADMIN") {
+      router.push(`/admin-dashboard/create-request?categoryId=${categoryId}`);
+    } else if (role === "STAFF") {
+      toast("Only For Citizen and Admin.", {
+        description: "Please login as a citizen to create request",
+      });
+    }
   };
 
   return (
     <div className="min-h-screen bg-slate-50/50 py-10 px-4 sm:px-6 lg:px-8 space-y-10">
-      {/* Under Construction Banner */}
-      <div className="max-w-5xl mx-auto bg-amber-200 border border-amber-200 rounded-xl p-4 flex items-center gap-3 text-amber-800 shadow-sm">
-        <div className="size-9 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0 text-amber-700">
-          <HardHat className="size-5" />
-        </div>
-        <div className="text-xs sm:text-sm">
-          <p className="font-bold">Page Under Development. Coming Soon . . .</p>
-          <p className="text-amber-700/80">
-            This contact form is currently in demo mode. Messaging and backend
-            API integration are under active construction.
-          </p>
-        </div>
-      </div>
       {/* 1. Header Section */}
       <div className="max-w-3xl mx-auto text-center space-y-3">
         <Badge
@@ -150,7 +155,7 @@ export default function ServicesPage() {
               return (
                 <Card
                   key={category.id}
-                  className="group hover:border-indigo-300 hover:shadow-md transition-all duration-200 flex flex-col justify-between border-slate-200 bg-white"
+                  className="group hover:border-indigo-300 bg-violet-100 hover:shadow-md transition-all duration-200 flex flex-col justify-between border-slate-200"
                 >
                   <CardHeader className="pb-3 space-y-2">
                     <div className="flex items-center justify-between gap-2">
@@ -191,7 +196,7 @@ export default function ServicesPage() {
 
                     <Button
                       onClick={() => handleSelectCategory(category.id)}
-                      className="w-full bg-slate-900 hover:bg-indigo-600 text-white text-xs h-9 transition-colors font-medium flex items-center justify-center gap-1.5"
+                      className="w-full hover:bg-indigo-600 text-white text-xs h-9 transition-colors font-medium flex items-center justify-center gap-1.5"
                     >
                       Request This Service <ArrowRight className="size-3.5" />
                     </Button>

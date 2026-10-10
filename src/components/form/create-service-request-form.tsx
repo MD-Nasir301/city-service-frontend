@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "@tanstack/react-form";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useMemo } from "react";
 import { toast } from "sonner";
 import z from "zod";
@@ -46,8 +46,10 @@ export function CreateServiceRequestForm({
   isLoadingCategories = false,
   initialData,
   isUpdateMode = false,
-}: CreateServiceRequestFormProps) {
+}: CreateServiceRequestFormProps & { initialData?: any }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const categoryIdParam = searchParams.get("categoryId") || initialData?.categoryId || "";
 
   // 1. Fetch categories
   const { data: categoriesResponse } = useGetCategories();
@@ -79,7 +81,7 @@ export function CreateServiceRequestForm({
   type ServiceRequestDefaultValues = z.infer<typeof createServiceRequestSchema>;
 
   const defaultValues: ServiceRequestDefaultValues = {
-    categoryId: initialData?.categoryId || "",
+    categoryId: categoryIdParam,
     title: initialData?.title || "",
     description: initialData?.description || "",
     address: initialData?.address || "",
@@ -117,7 +119,7 @@ export function CreateServiceRequestForm({
 
   // route prefix
   const { data: userResponse } = useGetMe();
-  const user = userResponse.data;
+  const user = userResponse?.data;
   let prefix = "";
   if (user?.role === "CITIZEN") {
     prefix = "citizen-dashboard";
@@ -125,6 +127,7 @@ export function CreateServiceRequestForm({
   if (user?.role === "ADMIN") {
     prefix = "admin-dashboard";
   }
+
   // Form setup
   const form = useForm({
     defaultValues,
@@ -141,7 +144,6 @@ export function CreateServiceRequestForm({
           val !== undefined &&
           val !== ""
         ) {
-          // Date convert to ISO String
           if (
             (key === "preferredStartDate" || key === "preferredEndDate") &&
             val
@@ -224,8 +226,8 @@ export function CreateServiceRequestForm({
                   {type === "ALL"
                     ? "All Categories"
                     : type === "FREE"
-                      ? "Free Services"
-                      : "Paid Services"}
+                    ? "Free Services"
+                    : "Paid Services"}
                 </label>
               ))}
             </div>
