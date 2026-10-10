@@ -1,5 +1,11 @@
 import apiClient from "@/lib/apiClient";
-import { IUserQueryParams, IUser, UserRole, UserStatus } from "@/types/user.type";
+import {
+  IUserQueryParams,
+  IUser,
+  UserRole,
+  UserStatus,
+} from "@/types/user.type";
+import { UserSingleResponse } from "@/types/user.type";
 
 //  Fatch all users
 export const getAllUsers = async (params?: IUserQueryParams) => {
@@ -15,11 +21,11 @@ export const getAllUsers = async (params?: IUserQueryParams) => {
 
   return await apiClient<{ success: boolean; data: IUser[] }>(
     `/admin/users?${queryParams.toString()}`,
-    { method: "GET" }
+    { method: "GET" },
   );
 };
 
-// Update users role 
+// Update users role
 export const updateUserRole = async ({
   userId,
   role,
@@ -32,7 +38,7 @@ export const updateUserRole = async ({
     {
       method: "PATCH",
       body: { role },
-    }
+    },
   );
 };
 
@@ -49,17 +55,24 @@ export const updateUserStatus = async ({
     {
       method: "PATCH",
       body: { status },
-    }
+    },
   );
 };
 
-
-// Delete User 
+// Delete User
 export const deleteUserStatus = async (userId: string) => {
   return await apiClient<{ success: boolean; message: string }>(
     `/admin/delete-user/${userId}`,
     {
-      method: "PATCH", 
-    }
+      method: "PATCH",
+    },
   );
+};
+
+// Update My Profile 
+export const updateMyProfile = async (formData: FormData) => {
+  return await apiClient<UserSingleResponse>("/users/me", {
+    method: "PATCH",
+    body: formData, 
+  });
 };

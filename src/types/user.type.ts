@@ -31,3 +31,17 @@ export interface IUserQueryParams {
   limit?: number;
   status?: string;
 }
+
+export interface IUpdateProfileInput {
+  name?: string;
+  phoneNumber?: string;
+}
+
+export interface UserSingleResponse {
+  success: boolean;
+  message?: string;
+  data: IUser & {
+    imageUrl?: string | null;
+    imagePublicId?: string | null;
+  };
+}
