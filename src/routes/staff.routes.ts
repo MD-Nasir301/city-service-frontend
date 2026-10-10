@@ -14,4 +14,10 @@ export const staffRoutes = [
       { title: "My Profile", url: `${prefix}/profile` },
     ],
   },
+  {
+    title: "Earning",
+    items: [
+      { title: "My Earning", url: `${prefix}/earnings` },
+    ],
+  },
 ];
