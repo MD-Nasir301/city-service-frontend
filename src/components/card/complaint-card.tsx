@@ -117,7 +117,7 @@ export function ComplaintCard({
   return (
     <div
       onClick={onClick}
-      className="group relative flex flex-col justify-between rounded-2xl border bg-card p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:border-green-300 cursor-pointer overflow-hidden"
+      className="group  relative flex flex-col justify-between rounded-2xl border  p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:border-green-300 cursor-pointer overflow-hidden"
     >
       <div className="space-y-3">
         {/* Top Header */}
