@@ -8,10 +8,12 @@ export const citizenRoutes = [
       { title: "My Requests", url: `${prefix}/my-requests` },
       { title: "Payment & Tracking", url: `${prefix}/payment&tracking` },
       { title: "Create Request", url: `${prefix}/create-request` },
+      { title: "MY Payments", url: `${prefix}/payments` },
     ],
   },
   {
     title: "Account",
     items: [{ title: "My Profile", url: `${prefix}/profile` }],
   },
+
 ];

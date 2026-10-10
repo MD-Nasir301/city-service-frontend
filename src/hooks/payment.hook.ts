@@ -5,7 +5,7 @@ import {
 } from "@/api/payment.api";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-// 1. Create Checkout Session Mutation Hook
+//  Create Checkout Session Mutation Hook
 export const useCreateCheckoutSession = () => {
   return useMutation({
     mutationFn: (serviceRequestId: string) =>
@@ -13,7 +13,7 @@ export const useCreateCheckoutSession = () => {
   });
 };
 
-// 2. Get Payment By ID Hook
+//  Get Payment By ID Hook
 export const useGetPaymentById = (paymentId: string) => {
   return useQuery({
     queryKey: ["payment", paymentId],
@@ -22,10 +22,13 @@ export const useGetPaymentById = (paymentId: string) => {
   });
 };
 
-// 3. Get My Payments Hook
+
 export const useGetMyPayments = () => {
   return useQuery({
-    queryKey: ["my-payments"],
-    queryFn: getMyPayments,
+    queryKey: ["MY_PAYMENTS"],
+    queryFn: async () => {
+      const res = await getMyPayments();
+      return res;
+    },
   });
 };
