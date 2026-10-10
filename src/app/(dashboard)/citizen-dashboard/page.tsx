@@ -14,12 +14,13 @@ import {
 } from "lucide-react";
 import AuthLoading from "@/components/auth/auth-loading";
 import CitizenRequestsTable from "@/components/modules/citizen/citizen-requests-table";
+import { OverviewSkeleton } from "@/components/dashboard/overview-skeleton";
 
 export default function CitizenOverviewPage() {
   const { data: requestsData, isLoading } = useGetMyRequests();
 
   if (isLoading) {
-    return <AuthLoading label="Loading Citizen Dashboard..." />;
+    return <OverviewSkeleton />;
   }
 
   const requests = requestsData?.data || [];

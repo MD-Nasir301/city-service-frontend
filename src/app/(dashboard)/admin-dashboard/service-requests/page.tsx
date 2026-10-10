@@ -37,6 +37,7 @@ import AuthLoading from "@/components/auth/auth-loading";
 import { toast } from "sonner";
 import { useGetAvailableStaffs, useAssignStaff } from "@/hooks/staff.hook";
 import { RequestStatus } from "@/types/services-request.type";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
 
 // Status Badge Color Helper
 const getStatusBadge = (status: string) => {
@@ -142,7 +143,7 @@ export default function AdminServiceRequestsPage() {
     useUpdateServiceRequestStatus();
 
   if (isLoading) {
-    return <AuthLoading label="Loading Service Requests..." />;
+    return <TableSkeleton />;
   }
 
   const requests = requestsData?.data || [];

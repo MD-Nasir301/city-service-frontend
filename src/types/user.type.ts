@@ -13,6 +13,17 @@ export interface IUser {
   updatedAt: string;
 }
 
+export interface UserResponse {
+  success: boolean;
+  data: IUser[];
+  meta?: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages?: number;
+  };
+}
+
 export interface IUserQueryParams {
   role?: string;
   search?: string;

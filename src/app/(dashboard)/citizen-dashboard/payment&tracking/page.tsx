@@ -12,13 +12,14 @@ import { Filter } from "lucide-react";
 import AuthLoading from "@/components/auth/auth-loading";
 import { useGetMyRequests } from "@/hooks/service-request.hook";
 import CitizenRequestsTable from "@/components/modules/citizen/citizen-requests-table";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
 
 export default function PaymentAndTrakingPage() {
   const [statusFilter, setStatusFilter] = useState<string | null>("ALL");
   const { data: requestsData, isLoading } = useGetMyRequests();
 
   if (isLoading) {
-    return <AuthLoading label="Loading Your Requests..." />;
+    return <TableSkeleton />;
   }
 
   const rawRequests = requestsData?.data || [];

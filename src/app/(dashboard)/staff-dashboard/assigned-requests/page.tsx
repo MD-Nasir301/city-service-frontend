@@ -1,14 +1,14 @@
 "use client";
 
 import { useGetStaffAssignedRequests } from "@/hooks/service-request.hook";
-import AuthLoading from "@/components/auth/auth-loading";
 import StaffAssignedRequestsTable from "@/components/modules/staff/staff-assigned-requests-table";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
 
 export default function StaffAssignedRequestsPage() {
   const { data: requestsData, isLoading, refetch } = useGetStaffAssignedRequests();
 
   if (isLoading) {
-    return <AuthLoading label="Loading Assigned Requests..." />;
+    return <TableSkeleton />;
   }
 
   const requests = requestsData?.data || [];

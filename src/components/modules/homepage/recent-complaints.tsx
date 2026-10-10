@@ -8,6 +8,7 @@ import { useGetAllServiceRequests } from "@/hooks/service-request.hook";
 import { IServiceRequestUI } from "@/types/services-request.type";
 import { error } from "console";
 import { da } from "zod/locales";
+import { CardSkeleton } from "@/components/ui/card-skeleton";
 
 export function RecentComplaints() {
   const router = useRouter();
@@ -19,6 +20,10 @@ export function RecentComplaints() {
   });
 
   const complaints = data?.data || data?.result || [];
+
+
+
+  
 
   return (
     <section className="py-16 bg-slate-50/50 dark:bg-slate-950/50">
@@ -41,10 +46,7 @@ export function RecentComplaints() {
 
         {/* Complaints Grid */}
         {isLoading && (
-          <div className="flex items-center justify-center h-32">
-            <Loader2 className="animate-spin m-2" />
-            <p className="text-muted-foreground ">Loading complaints...</p>
-          </div>
+         <CardSkeleton />
         )}
         {isError && (
           <div className="flex items-center justify-center h-32">

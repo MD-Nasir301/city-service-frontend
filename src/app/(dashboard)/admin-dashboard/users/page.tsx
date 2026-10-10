@@ -28,8 +28,8 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Search, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
-import AuthLoading from "@/components/auth/auth-loading";
 import { toast } from "sonner";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
 
 // Role Badge Color Helper
 const getRoleBadge = (role: UserRole) => {
@@ -63,13 +63,19 @@ const getStatusBadge = (status: UserStatus) => {
   switch (status) {
     case "ACTIVE":
       return (
-        <Badge variant="outline" className="bg-emerald-50 text-emerald-600 border-emerald-200">
+        <Badge
+          variant="outline"
+          className="bg-emerald-50 text-emerald-600 border-emerald-200"
+        >
           Active
         </Badge>
       );
     case "BLOCKED":
       return (
-        <Badge variant="outline" className="bg-amber-50 text-amber-600 border-amber-200">
+        <Badge
+          variant="outline"
+          className="bg-amber-50 text-amber-600 border-amber-200"
+        >
           Blocked
         </Badge>
       );
@@ -81,8 +87,9 @@ const getStatusBadge = (status: UserStatus) => {
 export default function AdminUsersPage() {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedRoleFilter, setSelectedRoleFilter] = useState<string>("ALL");
-  const [selectedStatusFilter, setSelectedStatusFilter] = useState<string>("ALL");
-  
+  const [selectedStatusFilter, setSelectedStatusFilter] =
+    useState<string>("ALL");
+
   // Pagination States
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
@@ -98,20 +105,22 @@ export default function AdminUsersPage() {
 
   // Mutations
   const { mutate: updateRole, isPending: isUpdatingRole } = useUpdateUserRole();
-  const { mutate: updateStatus, isPending: isUpdatingStatus } = useUpdateUserStatus();
+  const { mutate: updateStatus, isPending: isUpdatingStatus } =
+    useUpdateUserStatus();
   const { mutate: deleteUser, isPending: isDeleting } = useDeleteUser();
 
   if (isLoading) {
-    return <AuthLoading label="Loading Users..." />;
+    return <TableSkeleton />;
   }
 
   const users = usersResponse?.data || [];
-  const meta = usersResponse?.meta || {
-    page: 1,
-    limit: 10,
-    total: 0,
-    totalPages: 1,
-  };
+  
+  // Safely extract meta and compute totalPages if missing from backend meta
+  const rawMeta = usersResponse?.meta;
+  const total = rawMeta?.total || 0;
+  const currentLimit = rawMeta?.limit || limit;
+  const currentPage = rawMeta?.page || page;
+  const totalPages = (rawMeta as any)?.totalPages || Math.ceil(total / currentLimit) || 1;
 
   // Change Role Handler
   const handleRoleChange = (userId: string, newRole: UserRole) => {
@@ -124,7 +133,7 @@ export default function AdminUsersPage() {
         onError: (err: any) => {
           toast.error(err?.message || "Failed to update user role.");
         },
-      }
+      },
     );
   };
 
@@ -139,7 +148,7 @@ export default function AdminUsersPage() {
         onError: (err: any) => {
           toast.error(err?.message || "Failed to update user status.");
         },
-      }
+      },
     );
   };
 
@@ -165,7 +174,8 @@ export default function AdminUsersPage() {
           User Management
         </h1>
         <p className="text-sm text-slate-500">
-          View registered users, search, assign roles, and toggle active/blocked account statuses.
+          View registered users, search, assign roles, and toggle active/blocked
+          account statuses.
         </p>
       </div>
 
@@ -179,7 +189,7 @@ export default function AdminUsersPage() {
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
-              setPage(1); // Reset to first page on search
+              setPage(1);
             }}
             className="pl-9 h-9 text-xs"
           />
@@ -252,7 +262,10 @@ export default function AdminUsersPage() {
             <TableBody>
               {users.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={8} className="text-center py-8 text-slate-500">
+                  <TableCell
+                    colSpan={8}
+                    className="text-center py-8 text-slate-500"
+                  >
                     No users found matching your criteria.
                   </TableCell>
                 </TableRow>
@@ -261,7 +274,9 @@ export default function AdminUsersPage() {
                   <TableRow key={user.id}>
                     {/* User Info */}
                     <TableCell>
-                      <div className="font-semibold text-slate-800">{user.name}</div>
+                      <div className="font-semibold text-slate-800">
+                        {user.name}
+                      </div>
                       <div className="text-xs text-slate-500">{user.email}</div>
                     </TableCell>
 
@@ -309,7 +324,10 @@ export default function AdminUsersPage() {
                         value={user.status}
                         onValueChange={(newStatus) => {
                           if (newStatus) {
-                            handleStatusChange(user.id, newStatus as UserStatus);
+                            handleStatusChange(
+                              user.id,
+                              newStatus as UserStatus,
+                            );
                           }
                         }}
                         disabled={isUpdatingStatus}
@@ -344,7 +362,7 @@ export default function AdminUsersPage() {
           </Table>
 
           {/* Pagination Controls */}
-          {meta.total > 0 && (
+          {total > 0 && (
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 border-t bg-slate-50/50">
               <div className="flex items-center gap-2 text-xs text-slate-600">
                 <span>Rows per page:</span>
@@ -366,8 +384,9 @@ export default function AdminUsersPage() {
                   </SelectContent>
                 </Select>
                 <span className="ml-2 font-medium">
-                  Showing {((meta.page - 1) * meta.limit) + 1} to{" "}
-                  {Math.min(meta.page * meta.limit, meta.total)} of {meta.total} users
+                  Showing {(currentPage - 1) * currentLimit + 1} to{" "}
+                  {Math.min(currentPage * currentLimit, total)} of {total}{" "}
+                  users
                 </span>
               </div>
 
@@ -377,19 +396,21 @@ export default function AdminUsersPage() {
                   size="sm"
                   className="h-8 text-xs bg-white"
                   onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-                  disabled={meta.page <= 1}
+                  disabled={currentPage <= 1}
                 >
                   <ChevronLeft className="size-3.5 mr-1" /> Previous
                 </Button>
                 <span className="text-xs text-slate-600 font-medium px-2">
-                  Page {meta.page} of {meta.totalPages}
+                  Page {currentPage} of {totalPages}
                 </span>
                 <Button
                   variant="outline"
                   size="sm"
                   className="h-8 text-xs bg-white"
-                  onClick={() => setPage((prev) => Math.min(prev + 1, meta.totalPages))}
-                  disabled={meta.page >= meta.totalPages}
+                  onClick={() =>
+                    setPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                  disabled={currentPage >= totalPages}
                 >
                   Next <ChevronRight className="size-3.5 ml-1" />
                 </Button>

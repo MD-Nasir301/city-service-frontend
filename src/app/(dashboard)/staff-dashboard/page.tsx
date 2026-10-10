@@ -12,8 +12,8 @@ import {
   XCircle,
   ArrowRight,
 } from "lucide-react";
-import AuthLoading from "@/components/auth/auth-loading";
 import StaffAssignedRequestsTable from "@/components/modules/staff/staff-assigned-requests-table";
+import { OverviewSkeleton } from "@/components/dashboard/overview-skeleton";
 
 export default function StaffOverviewPage() {
   const { data: statsResponse, isLoading: isStatsLoading } =
@@ -25,7 +25,7 @@ export default function StaffOverviewPage() {
   } = useGetStaffAssignedRequests();
 
   if (isStatsLoading || isRequestsLoading) {
-    return <AuthLoading label="Loading Staff Overview..." />;
+    return <OverviewSkeleton />;
   }
 
   const stats = statsResponse?.data || {
@@ -36,7 +36,7 @@ export default function StaffOverviewPage() {
     rejectedRequests: 0,
   };
 
-  const recentRequests = (requestsResponse?.data || []).slice(0, 5); // সাম্প্রতিক ৫টি রিকোয়েস্ট
+  const recentRequests = (requestsResponse?.data || []).slice(0, 5);
 
   return (
     <div className="space-y-6">

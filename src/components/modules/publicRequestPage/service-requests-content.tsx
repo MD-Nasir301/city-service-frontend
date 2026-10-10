@@ -6,7 +6,12 @@ import { ComplaintCard } from "@/components/card/complaint-card";
 import { useGetAllServiceRequests } from "@/hooks/service-request.hook";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, FileX, SlidersHorizontal } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  FileX,
+  SlidersHorizontal,
+} from "lucide-react";
 import {
   CategoryType,
   IServiceRequestUI,
@@ -14,6 +19,7 @@ import {
   RequestStatus,
 } from "@/types/services-request.type";
 import { useState } from "react";
+import { CardSkeleton } from "@/components/ui/card-skeleton";
 
 export function ServiceRequestsContent() {
   const router = useRouter();
@@ -68,7 +74,6 @@ export function ServiceRequestsContent() {
 
       {/* Main 2-Column Responsive Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
-        
         {/* Left Sidebar: Filter Component */}
         <aside
           className={`lg:col-span-1  bg-card border p-3 rounded-2xl sticky top-20 shadow-sm transition-all duration-200 ${
@@ -84,16 +89,8 @@ export function ServiceRequestsContent() {
 
         {/* Right Main Content: Cards Grid & States */}
         <section className="lg:col-span-3 space-y-6">
-          
           {/* Loading State */}
-          {isLoading && (
-            <div className="flex flex-col items-center justify-center py-24 bg-card rounded-2xl border">
-              <Spinner />
-              <p className="mt-3 text-sm font-medium text-muted-foreground">
-                Loading public service requests...
-              </p>
-            </div>
-          )}
+          {isLoading && <CardSkeleton />}
 
           {/* Error State */}
           {isError && (
@@ -125,7 +122,8 @@ export function ServiceRequestsContent() {
                   <FileX className="size-14 text-muted-foreground/60 stroke-1" />
                   <h3 className="font-bold text-xl">No Requests Found</h3>
                   <p className="text-sm text-muted-foreground max-w-sm">
-                    We couldn't find any public service requests matching your current filters. Try resetting the filters.
+                    We couldn't find any public service requests matching your
+                    current filters. Try resetting the filters.
                   </p>
                 </div>
               )}
@@ -134,8 +132,14 @@ export function ServiceRequestsContent() {
               {totalPages > 1 && (
                 <div className="flex items-center justify-between bg-card p-4 rounded-xl border mt-8">
                   <p className="text-xs font-medium text-muted-foreground">
-                    Page <span className="font-bold text-foreground">{currentPage}</span> of{" "}
-                    <span className="font-bold text-foreground">{totalPages}</span>
+                    Page{" "}
+                    <span className="font-bold text-foreground">
+                      {currentPage}
+                    </span>{" "}
+                    of{" "}
+                    <span className="font-bold text-foreground">
+                      {totalPages}
+                    </span>
                   </p>
 
                   <div className="flex items-center gap-2">
@@ -164,7 +168,6 @@ export function ServiceRequestsContent() {
             </>
           )}
         </section>
-
       </div>
     </div>
   );

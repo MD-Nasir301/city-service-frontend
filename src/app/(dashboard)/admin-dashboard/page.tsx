@@ -25,12 +25,13 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import { OverviewSkeleton } from "@/components/dashboard/overview-skeleton";
 
 export default function AdminOverviewPage() {
   const { data, isLoading, isError } = useGetAdminDashboardStats();
 
   if (isLoading) {
-    return <AuthLoading label="Loading Dashboard Stats..." />;
+    return  <OverviewSkeleton />;;
   }
 
   if (isError || !data?.data) {

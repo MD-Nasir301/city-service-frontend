@@ -1,10 +1,10 @@
 import { deleteUserStatus, getAllUsers, updateUserRole, updateUserStatus } from "@/api/user.api";
-import { IUserQueryParams } from "@/types/user.type";
+import { IUserQueryParams, UserResponse } from "@/types/user.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 // Get All Users Hook
 export const useGetAllUsers = (params?: IUserQueryParams) => {
-  return useQuery({
+  return useQuery<UserResponse>({
     queryKey: ["users", params],
     queryFn: () => getAllUsers(params),
     staleTime: 1000 * 60 * 5,

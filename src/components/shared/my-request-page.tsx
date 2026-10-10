@@ -23,6 +23,7 @@ import { ComplaintCard } from "@/components/card/complaint-card";
 import { CreateServiceRequestForm } from "@/components/form/create-service-request-form";
 import { IServiceRequestUI } from "@/types/services-request.type";
 import { useGetMe } from "@/hooks/auth.hook";
+import { CardSkeleton } from "../ui/card-skeleton";
 
 export default function MyRequestsPage() {
   const router = useRouter();
@@ -105,9 +106,7 @@ export default function MyRequestsPage() {
 
       {/* Content Area */}
       {isLoading ? (
-        <div className="flex justify-center items-center py-20">
-          <Spinner className="size-8" />
-        </div>
+        <CardSkeleton />
       ) : isError ? (
         <div className="text-center py-12 text-destructive flex flex-col items-center gap-2">
           <AlertCircle className="size-8" />
@@ -124,7 +123,7 @@ export default function MyRequestsPage() {
           </p>
 
           <Button
-            onClick={() => router.push("/create-request")}
+            onClick={() => router.push(`/${prefix}/create-request`)}
             size="sm"
             variant="outline"
           >
@@ -138,7 +137,7 @@ export default function MyRequestsPage() {
               key={item.id}
               complaint={item}
               showActions={true}
-              onClick={() =>router.push(`/requests?id=${item.id}`)}
+              onClick={() => router.push(`/requests?id=${item.id}`)}
               onEdit={handleEditClick}
               onDelete={handleDeleteClick}
               isDeleting={isDeleting}
