@@ -83,7 +83,7 @@ export default function ServicesPage() {
           Services
         </Badge>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-          Explore Civic Services
+          Explore Civic <span className="text-blue-500">Services</span>
         </h1>
         <p className="text-sm sm:text-base text-slate-600 max-w-xl mx-auto">
           Select a service category below to request immediate assistance,
