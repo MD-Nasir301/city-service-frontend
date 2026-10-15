@@ -1,4 +1,4 @@
-# City Service Frontend
+# City Service 
 
 ![City Service Platform — city skyline](./public/hero-section.jpg)
 
