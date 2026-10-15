@@ -1,4 +1,4 @@
-# City Complaint & Service Platform
+# City Service Frontend
 
 ![City Service Platform — city skyline](./public/hero-section.jpg)
 
@@ -8,7 +8,12 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss)](https://tailwindcss.com/)
 
-The City Complaint & Service Platform is a role-based frontend for connecting citizens, service staff, and administrators. Citizens can submit and track requests, staff can manage assigned work, and administrators can oversee service operations and platform users.
+City Service Frontend is the web client for a role-based civic service platform. It connects citizens, service staff, and administrators: citizens can submit and track requests, staff can manage assigned work, and administrators can oversee service operations and platform users.
+
+## Screenshots / UI Preview
+
+![Your picture link](https://res.cloudinary.com/xhmxwbu4/image/upload/v1791968684/screencapture-city-service-frontend-vercel-app-2026-10-14-14_42_17.jpg)
+
 
 ## Key Features
 
@@ -107,7 +112,7 @@ The Next.js configuration sets `output: "export"`. Production builds generate st
 
 ### Prerequisites
 
-- Node.js **20.9 or later** and npm. The project also declares Bun 1.4.2 as its package manager and includes a `bun.lock`.
+- Node.js **20.9 or later** and npm, or Bun **1.4.2** (the package manager declared by this project).
 - Access to a compatible backend API.
 - A Google OAuth client ID if Google sign-in is to be enabled.
 
@@ -136,11 +141,18 @@ Both variables are read by browser-side code because they use the `NEXT_PUBLIC_`
 
 ## Installation and Local Development
 
-Install dependencies and start the development server:
+Install dependencies and start the development server. With npm:
 
 ```bash
-npm install
+npm ci
 npm run dev
+```
+
+Or, with Bun:
+
+```bash
+bun install --frozen-lockfile
+bun run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
@@ -196,3 +208,12 @@ Use the backend team's API documentation or collection for request/response sche
 - Route guards and dashboard navigation are implemented on the frontend; authorization must also be enforced by the backend.
 - Never commit `.env.local` or place secret credentials in `NEXT_PUBLIC_` variables.
 - The production build is a static export. Features requiring a Next.js runtime server are not available unless the deployment architecture is changed.
+
+## 👨‍💻 Author & Contact
+
+**Nasirullah Babu**  
+*Full Stack Web Developer | Web Solution Specialist*
+
+* 🌐 **Portfolio:** [https://nasirullah.vercel.app/](https://nasirullah.vercel.app/)
+* 💼 **LinkedIn:** [Nasirullah Babu](https://linkedin.com/in/nasirullah-babu-8342531b8)
+* 📧 **Email:** nasir21b@gmail.com
